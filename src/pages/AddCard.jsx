@@ -1,20 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SpamInformativo from "../components/SpamInformativo";
 import InputSelect from "../components/InputSelect";
 import Radio from "../components/inputs/Radio";
 import LabelInput from "../components/LabelInput";
+import axios from "axios";
+import Card from "../components/Card";
 
 const AddCard = () => {
-  const [cardType, setCardType] = useState("");
-  const [cardColor, setCardColor] = useState("");
+  const [cardType, setCardType] = useState("CREDIT");
+  const [cardColor, setCardColor] = useState("TITANIUM");
+  const [client, setClient] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:8080/api/clients/")
+      .then((response) => {
+        setClient(response.data.find((client) => client.id === 2));
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+
+  if (!client) {
+    return <p>Loading client data...</p>;
+  }
 
   const handleCardTypeChange = (e) => {
-    setCardType(e.target.value);
+    setCardType(e.target.value.toUpperCase());
   };
 
   const handleCardColorChange = (e) => {
     setCardColor(e.target.value);
   };
+
+  console.log(client);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -22,6 +42,7 @@ const AddCard = () => {
     console.log("Submit");
     console.log(url);
   };
+  console.log();
 
   return (
     <div>
@@ -33,33 +54,54 @@ const AddCard = () => {
         imgSrc="/public/addCard.png"
       />
       <div className="flex items-center justify-center py-10 text-xl">
-        <div className="flex justify-center items-center gap-10 py-5 bg-[#C4DFFE] rounded-3xl">
-          <img src="/public/card.png" alt="" className="w-1/4" />
+        <div className="flex justify-center items-center gap-10 py-5 bg-[#C4DFFE] rounded-3xl w-1/2">
+          {/* <img src="/public/card.png" alt="" className="w-1/4" /> */}
+          <Card
+            key={""}
+            cvv={"***"}
+            color={cardColor}
+            type={cardType}
+            number={"************"}
+            expiration={"2034-08-40T16:04:27.11687"}
+            name={client.firstName + " " + client.lastName}
+          />
           <div className="flex items-center justify-center w-1/2 ">
             <form
               action={""}
               onSubmit={handleSubmit}
-              className=" p-10 flex flex-col gap-3 bg-[#c0c5ca7a] text-4xl rounded-3xl shadow-2xl items-center "
+              className=" p-10 flex flex-col gap-3 bg-[#c0c5cad3] text-4xl rounded-3xl shadow-2xl items-center "
             >
               <h2 className="text-5xl text-center border-b-2 border-black">
-                New Card
+                Generar tarjeta
               </h2>
               <div className="flex items-center justify-between gap-3">
-                <Radio title="Destination Type" options={["Own", "Others"]} />
+                <Radio
+                  title="Destination Type"
+                  options={["Debit", "Credit"]}
+                  onChange={handleCardTypeChange}
+                />
               </div>
-              <LabelInput type="number" name="amount" title="Amount" />
-              <LabelInput
-                type="text"
-                name="accountNumber"
-                title="Recipient's Number"
-              />
 
-              <LabelInput type="text" name="description" title="Description" />
+              <InputSelect
+                name="Color"
+                title="Color"
+                options={["GOLD", "BLACK", "TITANIUM", "SILVER"]}
+                onChange={handleCardColorChange}
+              />
+              <InputSelect
+                name="accountOrigin"
+                title="Account of origin"
+                options={client.accounts.map((account) => account.number)}
+                onChange={(e) => {
+                  // selectRef.current = e.target.value;
+                  // handleAccountOriginChange(e);
+                }}
+              />
               <button
                 type="submit"
                 className="inline-block w-full px-5 py-3 font-medium text-white bg-black rounded-lg sm:w-auto"
               >
-                Send Enquiry
+                Create card
               </button>
             </form>
           </div>

@@ -11,9 +11,8 @@ const Card = (promps) => {
       "bg-[url('https://i.pinimg.com/originals/40/c8/78/40c87825702a67b2d462d57fc4d60d91.jpg')] bg-cover bg-center";
   } else if (colorRecibido == "BLACK") {
     color = "bg-[url('/public/cardBlack.jpg')] bg-cover bg-center";
-  }else if(colorRecibido == "Silver"){
+  } else if (colorRecibido == "SILVER") {
     color = "bg-[url('/public/silver.jpg')] bg-cover bg-center";
-
   }
 
   return (
@@ -40,9 +39,13 @@ const Card = (promps) => {
             </p>
           </div>
         </div>
-        
+
         <div className="absolute inset-0 flex flex-col justify-between py-4  card-back rounded-2xl">
-          <div className={` bg-black w-full h-10 ${colorRecibido == "BLACK" ? "border-white border" : "border-black" }`}></div>
+          <div
+            className={` bg-black w-full h-10 ${
+              colorRecibido == "BLACK" ? "border-white border" : "border-black"
+            }`}
+          ></div>
           <div className="flex items-center ">
             <p className="w-full mx-5 text-black bg-white text-end">
               CVV {promps.cvv}

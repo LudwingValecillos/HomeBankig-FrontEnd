@@ -16,9 +16,10 @@ const Radio = (props) => {
           <label
             htmlFor={option}
             className={`flex cursor-pointer items-center justify-center rounded-md border border-gray-100 bg-white px-3 py-2 text-gray-900 hover:border-gray-200
-            ${selectedOption === option ? "border-blue-500 bg-blue-500 text-white" : ""}`}
+            ${selectedOption === option ? "border-blue-500 bg-blue-300 text-white" : ""}`}
           >
             <input
+            
               type="radio"
               name="ColorOption"
               value={option}
