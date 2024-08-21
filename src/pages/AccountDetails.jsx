@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Account from "../components/Account";
 import Table from "../components/Table";
 import SpamInformativo from "../components/SpamInformativo";
 import Banner from "../components/Banner";
 import axios from "axios";
+import Buttom from "../components/Buttom";
 
 const AccountDetails = () => {
   const { id } = useParams(); // Get the id from the URL parameters
@@ -15,7 +16,7 @@ const AccountDetails = () => {
     axios
       .get("http://localhost:8080/api/clients/")
       .then((response) => {
-        setClient(response.data.find((client) => client.id === 2));
+        setClient(response.data.find((client) => client.id === 1));
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -56,7 +57,7 @@ const AccountDetails = () => {
         text3="✨ Navigate with confidence and discover all the options available to you, designed to offer you an unparalleled banking experience! 🚀"
         imgSrc="/public/accountDetails.png"
       />
-      <div className="flex items-center justify-center gap-10 p-10">
+      <div className="flex items-center justify-center gap-10 p-10 bg-[#A2D9D1] m-5 rounded-3xl shadow" >
         <div className="w-1/2 px-40 AccountDetails">
           <Account
             account={acc.number}
@@ -65,7 +66,10 @@ const AccountDetails = () => {
           />
         </div>
         {acc.transactions.length === 0 ? (
-          <p>No transactions available.</p>
+          <div className="flex flex-col gap-4 justify-center items-center bg-[#dad8f8d8] p-10 rounded-3xl">
+          <p className="text-2xl">No transactions available.</p>
+          <Link to="/transactions"><Buttom title="Make a transfer" isActive={false}/></Link>
+          </div>
         ) : (
           <div className="w-1/2 Transactions">
             <Table

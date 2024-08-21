@@ -14,7 +14,7 @@ const Main = () => {
     axios
       .get("http://localhost:8080/api/clients/")
       .then((response) => {
-        setClient(response.data.find((client) => client.id === 2));
+        setClient(response.data.find((client) => client.id === 1));
       })
       .catch((error) => {
         console.error("Error fetching data:", error);

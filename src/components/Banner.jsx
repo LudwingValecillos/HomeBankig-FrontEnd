@@ -7,8 +7,8 @@ const Banner = () => {
     <section className="text-white bg-gray-900">
       <div className="max-w-screen-xl px-4 py-20 mx-auto lg:flex lg:items-center">
         <div className="mx-auto max-w-1xl">
-          <h1 className="pb-4 text-3xl font-extrabold text-transparent bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 bg-clip-text sm:text-5xl">
-            Apply for your credit card or open a new account and get from
+          <h1 className="pb-4 text-3xl font-extrabold text-transparent bg-gradient-to-r from-green-300 via-blue-500 to-purple-400 bg-clip-text sm:text-5xl">
+            Apply for your credit card and get from
             $30,000 to a trip to Rio!
           </h1>
           <span className="my-5 sm:block text-xl/relaxed">
@@ -30,9 +30,7 @@ const Banner = () => {
             <Link to="/cards/addCard">
               <Button href="#" title="Apply for card"></Button>
             </Link>
-            <Link to="/addAccount">
-              <Button href="#" title="Create account"></Button>
-            </Link>
+            
           </div>
         </div>
       </div>

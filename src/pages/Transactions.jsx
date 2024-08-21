@@ -7,9 +7,9 @@ import Radio from "../components/inputs/Radio";
 
 const Transactions = () => {
   const [client, setClient] = useState(null);
-
   const [transactionType, setTransactionType] = useState("");
   const [accountOrigin, setAccountOrigin] = useState("");
+  const [accountDestiny, setAccountDestiny] = useState("");
   const [amount, setAmount] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [description, setDescription] = useState("");
@@ -33,11 +33,7 @@ const Transactions = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(transactionType);
-    console.log(accountOrigin);
-    console.log(amount);
-    console.log(accountNumber);
-    console.log(description);
+    console.log(transactionType, accountOrigin, amount, accountNumber, description);
   };
 
   const handleTransactionTypeChange = (e) => {
@@ -46,6 +42,11 @@ const Transactions = () => {
 
   const handleAccountOriginChange = (e) => {
     setAccountOrigin(e.target.value);
+    setAccountDestiny("");
+  };
+
+  const handleAccountDestinyChange = (e) => {
+    setAccountDestiny(e.target.value);
   };
 
   const handleAmountChange = (e) => {
@@ -69,41 +70,28 @@ const Transactions = () => {
         text3="Explore your options and manage your finances with ease and efficiency!"
         imgSrc="/public/transactions.png"
       />
-      <div className="flex bg-[#C4DFFE] m-10 rounded-3xl shadow-2xl">
+      <div className="flex bg-[#C4DFFE] m-10 rounded-3xl shadow-2xl p-5">
         <div className="w-1/2">
           <img src="/public/transactionsdiv.png" alt="" />
         </div>
 
-        <div className="flex items-center justify-center w-1/2 ">
+        <div className="flex items-center justify-center w-1/2">
           <form
-            action={""}
             onSubmit={handleSubmit}
-            className="p-10 flex flex-col gap-3 bg-[#c0c5ca7a] text-4xl rounded-3xl shadow-2xl items-center"
+            className="h-[550px] p-10 flex flex-col justify-between gap-3 bg-[#c0c5ca7a] text-4xl rounded-3xl shadow-2xl items-center"
           >
-            <h2 className="text-5xl text-center border-b-2 border-black">
-              Transfer
-            </h2>
+            <h2 className="text-5xl text-center border-b-2 border-black">Transfer</h2>
             <div className="flex items-center justify-between gap-3">
               <Radio
                 options={["Own", "Others"]}
                 ref={inputRef}
                 onChange={(e) => {
-                  console.log(e.target.value);
                   inputRef.current = e.target.value;
-                  console.log(inputRef);
-
                   handleTransactionTypeChange(e);
-                  console.log(transactionType);
                 }}
               />
             </div>
-            <div
-              className={` flex gap-3 items-center ${
-                transactionType == "Others" || !transactionType
-                  ? "flex-col"
-                  : ""
-              }`}
-            >
+            <div className={`flex gap-3 items-center ${transactionType === "Others" || !transactionType ? "flex-col" : ""}`}>
               <InputSelect
                 name="accountOrigin"
                 title="Account of origin"
@@ -111,51 +99,29 @@ const Transactions = () => {
                 ref={selectRef}
                 onChange={(e) => {
                   selectRef.current = e.target.value;
-                  console.log(selectRef);
                   handleAccountOriginChange(e);
                 }}
               />
               {inputRef.current === "Own" ? (
                 <>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-</svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0-3.75 3.75M21 12H3" />
+                  </svg>
 
-                <InputSelect
-                  name="accountDestiny"
-                  title="Destination account"
-                  options={client.accounts
-                    .filter((account) => account.number !== selectRef.current)
-                    .map((account) => account.number)}
-                  onChange={handleAccountOriginChange}
-                />
+                  <InputSelect
+                    name="accountDestiny"
+                    title="Destination account"
+                    options={client.accounts.filter((account) => account.number !== selectRef.current).map((account) => account.number)}
+                    onChange={handleAccountDestinyChange}
+                  />
                 </>
               ) : (
-                <LabelInput
-                  type="text"
-                  name="accountNumber"
-                  title="Account number"
-                  onChange={handleAccountNumberChange}
-                />
+                <LabelInput type="text" name="accountNumber" title="Account number" onChange={handleAccountNumberChange} />
               )}
             </div>
-            <LabelInput
-              type="number"
-              name="amount"
-              title="Amount"
-              onChange={handleAmountChange}
-            />
-
-            <LabelInput
-              type="text"
-              name="description"
-              title="Description"
-              onChange={handleDescriptionChange}
-            />
-            <button
-              type="submit"
-              className="inline-block w-full px-5 py-3 font-medium text-white bg-black rounded-lg sm:w-auto"
-            >
+            <LabelInput type="number" name="amount" title="Amount" onChange={handleAmountChange} />
+            <LabelInput type="text" name="description" title="Description" onChange={handleDescriptionChange} />
+            <button type="submit" className="inline-block w-full px-5 py-3 font-medium text-white bg-black rounded-lg sm:w-auto">
               Send Enquiry
             </button>
           </form>

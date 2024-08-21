@@ -42,7 +42,7 @@ const Header = () => {
       <nav
         className={`${
           isMenuOpen ? "block" : "hidden"
-        }  flex flex-col lg:flex-row absolute lg:static top-20 left-0 w-full lg:w-auto bg-[#dbd9fbf1] lg:flex lg:items-center lg:gap-4 transition-all duration-300 ease-in-out lg:block`}
+        } flex flex-col lg:flex-row absolute lg:static top-20 left-0 w-full lg:w-auto bg-[#dbd9fbf1] lg:flex lg:items-center lg:gap-4 transition-all duration-300 ease-in-out lg:block`}
       >
         <Link to="/accounts" onClick={() => setIsMenuOpen(false)}>
           <Buttom
