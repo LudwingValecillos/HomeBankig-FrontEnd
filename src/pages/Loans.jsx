@@ -18,7 +18,7 @@ const Loans = () => {
     axios
       .get("http://localhost:8080/api/clients/")
       .then((response) => {
-        setClient(response.data.find((client) => client.id === 1));
+        setClient(response.data.find((client) => client.id === 2));
       })
       .catch((error) => {
         console.error("Error fetching data:", error);

@@ -34,7 +34,7 @@ const AddCard = () => {
     setCardColor(e.target.value);
   };
 
-  console.log(client);
+  // console.log(client);
 
   const handleSubmit = (e) => {
     e.preventDefault();
