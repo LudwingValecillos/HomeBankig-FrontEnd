@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Account from "../components/Account";
 import Table from "../components/Table";
 import SpamInformativo from "../components/SpamInformativo";
@@ -11,16 +11,29 @@ const AccountDetails = () => {
   const { id } = useParams(); // Get the id from the URL parameters
 
   const [client, setClient] = useState(null);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8080/api/clients/")
-      .then((response) => {
-        setClient(response.data.find((client) => client.id === 2));
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+    const token = localStorage.getItem("token"); // Obtén el token del localStorage
+
+    if (token) {
+      axios
+        .get("http://localhost:8080/api/auth/current", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Incluye el token en el header Authorization
+          },
+        })
+        .then((response) => {
+          setClient(response.data); // Actualiza el estado con los datos del cliente
+        })
+        .catch((error) => {
+          navigate("/login");
+          console.error("Error fetching client data:", error);
+        });
+    } else {
+      console.error("No token found in localStorage");
+    }
   }, []);
 
   // Check if client is null before using it

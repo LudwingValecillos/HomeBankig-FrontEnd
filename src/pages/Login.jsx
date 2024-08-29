@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import LabelInput from "../components/LabelInput";
 import Button from "../components/Buttom";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -16,11 +17,31 @@ const Login = () => {
       [name]: value,
     }));
   };
+  const navigate = useNavigate();
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(formData);
     console.log("Submit");
+    formData.email = formData.email.toLowerCase();
+    sendPutRequest(formData);
+  };
+  const sendPutRequest = async (data) => {
+    try {
+      const response = await axios.post('http://localhost:8080/api/auth/login', data, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      console.log('Response:', response.data);
+    localStorage.setItem('token', response.data);
+    navigate('/accounts/');
+    } catch (error) {
+      alert("Credenciales incorrectas")
+      console.error('There was an error!', error);
+    }
   };
 
   return (
@@ -66,7 +87,7 @@ const Login = () => {
               </p>
             </div>
 
-            <form action="#" className="flex flex-col gap-4 w-96">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-96">
               <h2 className="text-5xl text-center">Login</h2>
 
               <LabelInput

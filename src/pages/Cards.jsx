@@ -4,19 +4,32 @@ import Carousel from "../components/Carousel";
 import SpamInformativo from "../components/SpamInformativo";
 import PrintCard from "../components/PrintCard";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Cards = () => {
   const [client, setClient] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8080/api/clients/")
-      .then((response) => {
-        setClient(response.data.find((client) => client.id === 2));
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+    const token = localStorage.getItem("token"); // Obtén el token del localStorage
+
+    if (token) {
+      axios
+        .get("http://localhost:8080/api/auth/current", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Incluye el token en el header Authorization
+          },
+        })
+        .then((response) => {
+          setClient(response.data); // Actualiza el estado con los datos del cliente
+        })
+        .catch((error) => {
+          navigate("/login");
+          console.error("Error fetching client data:", error);
+        });
+    } else {
+      console.error("No token found in localStorage");
+    }
   }, []);
    
   // Check if client is null before using it
