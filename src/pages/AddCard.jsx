@@ -99,10 +99,10 @@ const AddCard = () => {
               <InputSelect
                 name="Color"
                 title="Color"
-                options={["GOLD", "BLACK", "TITANIUM", "SILVER"]}
+                options={["GOLD", "BLACK", "TITANIUM", "SILVER", "RED", "BLUE"]}
                 onChange={handleCardColorChange}
               />
-              <InputSelect
+              {/* <InputSelect
                 name="accountOrigin"
                 title="Account of origin"
                 options={client.accounts.map((account) => account.number)}
@@ -110,7 +110,7 @@ const AddCard = () => {
                   // selectRef.current = e.target.value;
                   // handleAccountOriginChange(e);
                 }}
-              />
+              /> */}
               <button
                 type="submit"
                 className="inline-block w-full px-5 py-3 font-medium text-white bg-black rounded-lg sm:w-auto"

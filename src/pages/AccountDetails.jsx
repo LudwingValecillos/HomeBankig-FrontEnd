@@ -26,8 +26,10 @@ const AccountDetails = () => {
         })
         .then((response) => {
           setClient(response.data); // Actualiza el estado con los datos del cliente
+          
         })
         .catch((error) => {
+          
           navigate("/login");
           console.error("Error fetching client data:", error);
         });
