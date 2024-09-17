@@ -6,17 +6,21 @@ import LabelInput from "../components/LabelInput";
 import axios from "axios";
 import Card from "../components/Card";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { loginAction } from "../redux/actions/authenticationAction";
+import { addCardToClient } from "../redux/actions/clientAction";
 
 const AddCard = () => {
   const [cardType, setCardType] = useState("CREDIT");
-  const [cardColor, setCardColor] = useState("TITANIUM");
-  const [client, setClient] = useState(null);
-
+  const [cardColor, setCardColor] = useState("GOLD");
+  const client = useSelector((state) => state.client.client);
+  const dispatch = useDispatch();
+  
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token"); // Obtén el token del localStorage
-
+    const token = localStorage.getItem("token");
+  
     if (token) {
       axios
         .get("http://localhost:8080/api/auth/current", {
@@ -25,38 +29,63 @@ const AddCard = () => {
           },
         })
         .then((response) => {
-          setClient(response.data); // Actualiza el estado con los datos del cliente
+          dispatch(loadClient(response.data)); // Cambiar a loadClient
         })
         .catch((error) => {
-          navigate("/login");
           console.error("Error fetching client data:", error);
         });
-    } else {
-      console.error("No token found in localStorage");
     }
-  }, []);
+  }, [dispatch]);
+  
 
   if (!client) {
     return <p>Loading client data...</p>;
   }
 
-  const handleCardTypeChange = (e) => {
-    setCardType(e.target.value.toUpperCase());
-  };
-
-  const handleCardColorChange = (e) => {
-    setCardColor(e.target.value);
-  };
-
-  // console.log(client);
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    let url = e.value;
-    console.log("Submit");
-    console.log(url);
-  };
-  console.log();
+  
+    const token = localStorage.getItem("token");
+    const card = {
+      color: cardColor,
+      type: cardType.toUpperCase(),
+    };
+  
+    axios
+      .post("http://localhost:8080/api/cards/clients/current/cards", card, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        alert("Se ha agregado una nueva tarjeta");
+        console.log(res.data);
+        
+        dispatch(addCardToClient(res.data));
+
+        navigate("/cards");
+  
+      })
+      .catch((err) => {
+        console.log(err);
+        alert(err);
+      });
+  };   
+  
+const availableColors = ["GOLD", "SILVER", "TITANIUM"];  // Lista de colores posibles
+
+const colorDebitCard = client.cards
+  .filter((card) => card.type === "DEBIT")
+  .map((card) => card.color);
+
+const colorCreditCard = client.cards
+  .filter((card) => card.type === "CREDIT")
+  .map((card) => card.color);
+
+const availableColorsForDebit = availableColors.filter((color) => !colorDebitCard.includes(color));
+
+const availableColorsForCredit = availableColors.filter((color) => !colorCreditCard.includes(color));
 
   return (
     <div>
@@ -91,26 +120,17 @@ const AddCard = () => {
               <div className="flex items-center justify-between gap-3">
                 <Radio
                   title="Destination Type"
-                  options={["Debit", "Credit"]}
-                  onChange={handleCardTypeChange}
+                  options={["DEBIT", "CREDIT"]}
+                  onChange={(e) => setCardType(e.target.value)}
                 />
               </div>
 
               <InputSelect
                 name="Color"
                 title="Color"
-                options={["GOLD", "BLACK", "TITANIUM", "SILVER", "RED", "BLUE"]}
-                onChange={handleCardColorChange}
+                options={cardType == "DEBIT" ? availableColorsForDebit : availableColorsForCredit}
+                onChange={((e) => setCardColor(e.target.value))}
               />
-              {/* <InputSelect
-                name="accountOrigin"
-                title="Account of origin"
-                options={client.accounts.map((account) => account.number)}
-                onChange={(e) => {
-                  // selectRef.current = e.target.value;
-                  // handleAccountOriginChange(e);
-                }}
-              /> */}
               <button
                 type="submit"
                 className="inline-block w-full px-5 py-3 font-medium text-white bg-black rounded-lg sm:w-auto"

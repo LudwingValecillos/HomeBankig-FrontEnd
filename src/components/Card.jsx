@@ -9,23 +9,15 @@ const Card = (promps) => {
   } else if (colorRecibido == "TITANIUM") {
     color =
       "bg-[url('https://i.pinimg.com/originals/40/c8/78/40c87825702a67b2d462d57fc4d60d91.jpg')] bg-cover bg-center";
-  } else if (colorRecibido == "BLACK") {
-    color = "bg-[url('/public/cardBlack.jpg')] bg-cover bg-center";
   } else if (colorRecibido == "SILVER") {
     color = "bg-[url('/public/silver.jpg')] bg-cover bg-center";
-  } else if (colorRecibido == "BLUE") {
-    color = "bg-[url('/public/blue.jpg')] bg-cover bg-center";
-  } else if (colorRecibido == "RED") {
-    color = "bg-[url('/public/red.jpeg')] bg-cover bg-center";
-  }else if (colorRecibido == "GREEN") {
-    color = "bg-[url('/public/green.jpg')] bg-cover bg-center";
-  }
+  } 
 
   return (
     <div className="perspective-1000">
       <div
         className={`Card w-[338px] h-48 p-4 text-2xl rounded-2xl flex flex-col justify-between ${color} ${
-          colorRecibido === "BLACK" || colorRecibido === "TITANIUM" || colorRecibido === "RED" || colorRecibido === "BLUE"
+          colorRecibido === "BLACK" || colorRecibido === "TITANIUM" 
             ? "text-white"
             : "text-black"
         } card relative`}

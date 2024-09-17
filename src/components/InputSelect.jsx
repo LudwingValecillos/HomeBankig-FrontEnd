@@ -4,11 +4,11 @@ const InputSelect = (props) => {
   const { name, title, options, onChange } = props;
 
   return (
-    <label htmlFor={name} className="block text-sm font-medium text-gray-900">
+    <label htmlFor={name} className="block text-sm font-medium text-gray-900 ">
       <select
         name={name}
         onChange={onChange} // Asegúrate de pasar el onChange aquí
-        className="relative block rounded-md border-2 p-1 border-gray-200 bg-white shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600"
+        className="relative w-30 block rounded-md border-2 p-1 border-gray-200 bg-white shadow-sm focus-within:border-blue-600 focus-within:ring-1 focus-within:ring-blue-600"
       >
         <option value="" disabled selected hidden>
           {title}

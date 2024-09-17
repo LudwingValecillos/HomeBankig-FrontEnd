@@ -6,43 +6,25 @@ import SpamInformativo from "../components/SpamInformativo";
 import Banner from "../components/Banner";
 import axios from "axios";
 import Buttom from "../components/Buttom";
+import { useDispatch, useSelector } from "react-redux";
+import { loadClient } from "../redux/actions/clientAction";
 
 const AccountDetails = () => {
   const { id } = useParams(); // Get the id from the URL parameters
 
-  const [client, setClient] = useState(null);
+  const dispatch = useDispatch();
+
+  const client = useSelector((state) => state.client.client);
+
   const navigate = useNavigate();
 
-
-  useEffect(() => {
-    const token = localStorage.getItem("token"); // Obtén el token del localStorage
-
-    if (token) {
-      axios
-        .get("http://localhost:8080/api/auth/current", {
-          headers: {
-            Authorization: `Bearer ${token}`, // Incluye el token en el header Authorization
-          },
-        })
-        .then((response) => {
-          setClient(response.data); // Actualiza el estado con los datos del cliente
-          
-        })
-        .catch((error) => {
-          
-          navigate("/login");
-          console.error("Error fetching client data:", error);
-        });
-    } else {
-      console.error("No token found in localStorage");
-    }
-  }, []);
-
-  // Check if client is null before using it
-  if (!client) {
-    return <p>Loading client data...</p>;
+  if(client.firstName === ""){
+    dispatch(loadClient())
+      .unwrap() // Esto te permitira manejar el resultado del thunk en caso de error o exito
+      .catch((error) => console.log(error));
   }
 
+    
   // Find the account by id
   const acc = client.accounts.find(
     (account) => account.id === parseInt(id, 10)

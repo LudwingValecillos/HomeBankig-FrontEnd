@@ -18,7 +18,7 @@ function App() {
     <Routes>
       <Route path="/" element={<MainLayout />}>
         {/* Redirige la ruta raíz a "/accounts" */}
-        <Route index element={<Navigate to="accounts" replace />} />
+        <Route index element={<Navigate to="login" replace />} />
 
         <Route path="accounts" element={<Accounts />} />
         <Route path="account/:id" element={<AccountDetails />} />

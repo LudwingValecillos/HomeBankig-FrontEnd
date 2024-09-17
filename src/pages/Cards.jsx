@@ -1,53 +1,47 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Banner from "../components/Banner";
 import Carousel from "../components/Carousel";
 import SpamInformativo from "../components/SpamInformativo";
 import PrintCard from "../components/PrintCard";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { loadClient } from "../redux/actions/clientAction";
 
 const Cards = () => {
-  const [client, setClient] = useState(null);
+  const client = useSelector((state) => state.client.client);
+
+  const dispatch = useDispatch();
+
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token"); // Obtén el token del localStorage
-
-    if (token) {
-      axios
-        .get("http://localhost:8080/api/auth/current", {
-          headers: {
-            Authorization: `Bearer ${token}`, // Incluye el token en el header Authorization
-          },
-        })
-        .then((response) => {
-          setClient(response.data); // Actualiza el estado con los datos del cliente
-        })
-        .catch((error) => {
-          navigate("/login");
-          console.error("Error fetching client data:", error);
-        });
-    } else {
-      console.error("No token found in localStorage");
+    window.scrollTo(0, 0);
+     
+    if (client.firstName === "") {
+      
+      dispatch(loadClient())
+        .unwrap() // Esto te permitirá manejar el resultado del thunk en caso de error o éxito
+        .catch((error) => setError(error.message));
     }
-  }, []);
-   
-  // Check if client is null before using it
-  if (!client) {
-    return <p>Loading client data...</p>;
-  }
+    
+  }, [ dispatch, client.firstName]);
+
   return (
     <>
       <SpamInformativo
         title="Detailed View of Your Cards"
-        text1="Welcome to your personal card space! 🎉 Here you can view all the cards associated with your accounts. 👇"
-        text2="✨ You can see the card number, type (credit or debit), color, and expiration date of each one. Manage your finances quickly and securely."
+        text1="Here you can view all the cards associated with your accounts."
+        text2="✨ You can see the card number, type (credit or debit), color, and expiration date of each one."
         text3="Explore your options and maintain full control of your cards from one place! 🚀"
         imgSrc="/public/Payment.png"
       />
-      <PrintCard client={client} /> 
+      {client.cards.length !== 0 ? (
+        <PrintCard client={client} />
+      ) : (
+      ""
+      )}
       <Banner />
-
       <Carousel />
     </>
   );

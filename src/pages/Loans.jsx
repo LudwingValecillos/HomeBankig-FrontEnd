@@ -1,67 +1,105 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import InformativeSpam from "../components/SpamInformativo";
 import axios from "axios";
 import Table from "../components/Table";
-import LabelInput from "../components/LabelInput";
 import InputSelect from "../components/InputSelect";
-import { useState } from "react";
 import Radio from "../components/inputs/Radio";
+import FormattedNumberInput from "../components/FormattedNumberInput";
+import { useDispatch, useSelector } from "react-redux";
+import { loadClient } from "../redux/actions/clientAction";
 import { useNavigate } from "react-router-dom";
 
 const Loans = () => {
   const [transactionType, setTransactionType] = useState("");
   const [accountOrigin, setAccountOrigin] = useState("");
   const [amount, setAmount] = useState("");
-  const [client, setClient] = useState(null);
   const [payments, setPayments] = useState([]);
+  const [paymentSelected, setPaymentSelected] = useState("");
+  const [selectedLoan, setSelectedLoan] = useState(null);
+  const client = useSelector((state) => state.client.client);
+  const [loansAvailable, setLoans] = useState([]);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const token = localStorage.getItem("token"); // Obtén el token del localStorage
+    if (client.loans?.length <= 3) {
+      const token = localStorage.getItem("token");
 
-    if (token) {
       axios
-        .get("http://localhost:8080/api/auth/current", {
+        .get("http://localhost:8080/api/loans/loansAvailable", {
           headers: {
-            Authorization: `Bearer ${token}`, // Incluye el token en el header Authorization
+            Authorization: `Bearer ${token}`,
           },
         })
         .then((response) => {
-          setClient(response.data); // Actualiza el estado con los datos del cliente
+          setLoans(response.data);
         })
         .catch((error) => {
-          navigate("/login");
-          console.error("Error fetching client data:", error);
+          console.error("Error fetching loans:", error);
         });
-    } else {
-      console.error("No token found in localStorage");
     }
-  }, []);
-  // Check if client is null before using it
-  if (!client) {
-    return <p>Loading client data...</p>;
-  }
+  }, [client.loans]);
 
-  // Map loans only if client is not null
-  const simplifiedLoans = client.loans.map((loan) => ({
-    name: loan.name,
-    amount: loan.amount,
-    payments: loan.payments,
-  }));
+  useEffect(() => {
+    if (!client.firstName) {
+      dispatch(loadClient())
+        .unwrap()
+        .catch((error) => console.error(error.message));
+    }
+  }, [client.firstName, dispatch]);
+
+  const simplifiedLoans = Array.isArray(client.loans)
+    ? client.loans.map((loan) => ({
+        name: loan.name,
+        amount: loan.amount,
+        payments: loan.payments,
+      }))
+    : [];
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(transactionType);
-    console.log(accountOrigin);
-    console.log(amount);
-    console.log(payments);
+    const trans = {
+      id:
+        transactionType === "Hipotecario"
+          ? 1
+          : transactionType === "Automotriz"
+          ? 3
+          : 2,
+      amount: amount,
+      payments: paymentSelected.slice(0, 2).toString(),
+      destinationAccount: accountOrigin,
+    };
+
+    axios
+      .post("http://localhost:8080/api/loans/apply", trans, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((response) => {
+        alert("Loan applied successfully");
+        dispatch(loadClient());
+        navigate("/accounts/");
+      })
+      .catch((error) => {
+        console.error("Error applying loan:", error);
+      });
   };
 
   const handleTransactionTypeChange = (e) => {
-    setTransactionType(e.target.value);
-  };
-  const handlePaymentChange = (e) => {
-    setPayments(e.target.value);
+    const selectedLoanName = e.target.value;
+    setTransactionType(selectedLoanName);
+
+    const selectedLoanData = loansAvailable.find(
+      (loan) => loan.name === selectedLoanName
+    );
+
+    if (selectedLoanData) {
+      setSelectedLoan(selectedLoanData);
+      setPayments(
+        selectedLoanData.payments.map((payment) => `${payment} payments`)
+      );
+    }
   };
 
   const handleAccountOriginChange = (e) => {
@@ -77,76 +115,86 @@ const Loans = () => {
       <InformativeSpam
         title="Detailed view of your loans"
         text1="Welcome to your new loan section! Here you can view or request loans quickly and easily."
-        text2="Choose the type of loan you need, define the amount you want to request, and send your request. Our process is clear and efficient to help you get what you need."
-        text3="Explore the available options and request your loan today to have total control over your finances!"
+        text2="Choose the type of loan you need, define the amount you want to request, and send your request."
+        text3="Explore the available options and request your loan today!"
         imgSrc="/public/loan.png"
       />
       <div className="bg-[#69c2b6d7] m-10 rounded-3xl shadow-2xl p-10">
-        <div className="flex py-5 ">
-          <div className="flex items-center justify-center w-1/2">
-            {
+        <div className="flex py-5 justify-evenly">
+          {simplifiedLoans.length === 0 ? (
+            <div className="flex items-center justify-center w-1/2">
+              <h2 className="text-3xl text-center bg-white m-5 p-5 rounded-3xl shadow-2xl">
+                You don't have any active loans yet! Take this opportunity to
+                request your first loan and get the financial support you need.
+                Our process is fast, simple, and designed to help you every step
+                of the way. Explore the available options and get started today!
+              </h2>
+            </div>
+          ) : (
+            <div className="flex items-center justify-center w-1/2">
               <Table
                 title="Loans"
                 ths={["Type", "Amount", "Payments"]}
                 tds={simplifiedLoans}
               />
-            }
-          </div>
+            </div>
+          )}
 
-          <div className="flex items-center justify-center ">
-            <form
-              action={""}
-              onSubmit={handleSubmit}
-              className="p-10 flex flex-col gap-3 bg-[#c0c5ca7a] text-4xl rounded-3xl shadow-2xl items-center"
-            >
-              <h2 className="text-5xl text-center border-b-2 border-black">
-                Request a loan
-              </h2>
-              <div className="flex items-center justify-between gap-3">
-                <Radio
-                  options={["Mortgage", "Personal", "Automotive"]}
-                  onChange={handleTransactionTypeChange}
-                />
-              </div>
-              <div className="flex items-center justify-between gap-3">
-                <InputSelect
-                  name="account"
-                  title="Account of origin"
-                  options={client.accounts.map((account) => account.number)}
-                  onChange={handleAccountOriginChange}
-                />
-                <InputSelect
-                  name="payments"
-                  title="Payments"
-                  options={[
-                    "1 payment",
-                    "3 payments",
-                    "6 payments",
-                    "9 payments",
-                    "12 payments",
-                    "18 payments",
-                    "24 payments",
-                    "30 payments",
-                    "36 payments",
-                    "60 payments",
-                  ]}
-                  onChange={handlePaymentChange}
-                />
-              </div>
-              <LabelInput
-                type="number"
-                name="amount"
-                title="Amount"
-                onChange={handleAmountChange}
-              />
-
-              <button
-                type="submit"
-                className="inline-block w-full px-5 py-3 font-medium text-white bg-black rounded-lg sm:w-auto"
+          <div className="flex items-center justify-center">
+            {client.loans?.length < 3 ? (
+              <form
+                onSubmit={handleSubmit}
+                className="p-10 flex flex-col gap-3 bg-[#c0c5ca7a] text-4xl rounded-3xl shadow-2xl items-center"
               >
-                Send Enquiry
-              </button>
-            </form>
+                <h2 className="text-5xl text-center border-b-2 border-black">
+                  Request a loan
+                </h2>
+
+                <div className="flex items-center justify-between gap-3">
+                  <Radio
+                    options={loansAvailable.map((loan) => loan.name)}
+                    onChange={handleTransactionTypeChange}
+                  />
+                </div>
+
+                <div className="flex items-center justify-between gap-3">
+                  <InputSelect
+                    name="account"
+                    title="Account of origin"
+                    options={
+                      client.accounts?.map((account) => account.number) || []
+                    }
+                    onChange={handleAccountOriginChange}
+                  />
+                  <InputSelect
+                    name="payments"
+                    title={!selectedLoan ? `Select a loan` : "Payments"}
+                    options={payments}
+                    onChange={(e) => setPaymentSelected(e.target.value)}
+                  />
+                </div>
+
+                <FormattedNumberInput
+                  name="amount"
+                  title="Amount"
+                  value={amount}
+                  onChange={handleAmountChange}
+                />
+
+                <button
+                  type="submit"
+                  className="inline-block w-full px-5 py-3 font-medium text-white bg-black rounded-lg sm:w-auto"
+                >
+                  Send Enquiry
+                </button>
+              </form>
+            ) : (
+              <div className="flex items-center justify-center w-1/2">
+                <h2 className="text-3xl text-center border-blue-400 border-8 bg-white m-5 p-5 rounded-3xl shadow-2xl">
+                  You have reached the limit of loans you can request.
+                </h2>
+              </div>
+            )}
           </div>
         </div>
       </div>

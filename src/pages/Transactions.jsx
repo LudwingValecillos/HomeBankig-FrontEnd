@@ -1,78 +1,64 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import InformativeSpam from "../components/SpamInformativo";
 import LabelInput from "../components/LabelInput";
 import InputSelect from "../components/InputSelect";
 import axios from "axios";
 import Radio from "../components/inputs/Radio";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import FormattedNumberInput from "../components/FormattedNumberInput";
+import { loadClient } from "../redux/actions/clientAction";
 
 const Transactions = () => {
-  const [client, setClient] = useState(null);
+  const client = useSelector((state) => state.client.client);
   const [transactionType, setTransactionType] = useState("");
   const [accountOrigin, setAccountOrigin] = useState("");
   const [accountDestiny, setAccountDestiny] = useState("");
   const [amount, setAmount] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [description, setDescription] = useState("");
-  const inputRef = useRef();
-  const selectRef = useRef();
+  const dispatch = useDispatch();
+
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem("token"); // Obtén el token del localStorage
-
-    if (token) {
-      axios
-        .get("http://localhost:8080/api/auth/current", {
-          headers: {
-            Authorization: `Bearer ${token}`, // Incluye el token en el header Authorization
-          },
-        })
-        .then((response) => {
-          setClient(response.data); // Actualiza el estado con los datos del cliente
-        })
-        .catch((error) => {
-          navigate("/login");
-          console.error("Error fetching client data:", error);
-        });
-    } else {
-      console.error("No token found in localStorage");
+    window.scrollTo(0, 0);
+     
+    if (client.firstName === "") {
+      dispatch(loadClient())
+        .unwrap() // Esto te permitirá manejar el resultado del thunk en caso de error o éxito
+        .catch((error) => setError(error.message));
     }
-  }, []);
+    
+  }, [ dispatch, client.firstName]);
 
-  if (!client) {
-    return <p>Loading client data...</p>;
-  }
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(transactionType, accountOrigin, amount, accountNumber, description);
-  };
 
-  const handleTransactionTypeChange = (e) => {
-    setTransactionType(e.target.value);
-  };
+    const trans = {
+      amount: amount,
+      description : description,
+      sourceAccount: accountOrigin,
+      destinationAccount: accountDestiny,
+    };
 
-  const handleAccountOriginChange = (e) => {
-    setAccountOrigin(e.target.value);
-    setAccountDestiny("");
-  };
-
-  const handleAccountDestinyChange = (e) => {
-    setAccountDestiny(e.target.value);
-  };
-
-  const handleAmountChange = (e) => {
-    setAmount(e.target.value);
-  };
-
-  const handleAccountNumberChange = (e) => {
-    setAccountNumber(e.target.value);
-  };
-
-  const handleDescriptionChange = (e) => {
-    setDescription(e.target.value);
+    try {
+      const token = localStorage.getItem("token");
+      await axios.post("http://localhost:8080/api/transactions/clients/current/transactions", trans, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      alert("Transaction successful");
+      dispatch(loadClient())
+        .unwrap()
+        .catch((error) => setError(error.message));
+      
+    } catch (error) {
+      alert(error);
+      alert(error)
+    }
   };
 
   return (
@@ -86,7 +72,7 @@ const Transactions = () => {
       />
       <div className="flex bg-[#C4DFFE] m-10 rounded-3xl shadow-2xl p-5">
         <div className="w-1/2">
-          <img src="/public/transactionsdiv.png" alt="" />
+          <img src="/public/transactionsdiv.png" alt="Transaction" />
         </div>
 
         <div className="flex items-center justify-center w-1/2">
@@ -98,11 +84,7 @@ const Transactions = () => {
             <div className="flex items-center justify-between gap-3">
               <Radio
                 options={["Own", "Others"]}
-                ref={inputRef}
-                onChange={(e) => {
-                  inputRef.current = e.target.value;
-                  handleTransactionTypeChange(e);
-                }}
+                onChange={(e) => setTransactionType(e.target.value)}
               />
             </div>
             <div className={`flex gap-3 items-center ${transactionType === "Others" || !transactionType ? "flex-col" : ""}`}>
@@ -110,13 +92,12 @@ const Transactions = () => {
                 name="accountOrigin"
                 title="Account of origin"
                 options={client.accounts.map((account) => account.number)}
-                ref={selectRef}
                 onChange={(e) => {
-                  selectRef.current = e.target.value;
-                  handleAccountOriginChange(e);
+                  setAccountOrigin(e.target.value);
+                  setAccountDestiny("");
                 }}
               />
-              {inputRef.current === "Own" ? (
+              {transactionType === "Own" ? (
                 <>
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0-3.75 3.75M21 12H3" />
@@ -125,17 +106,35 @@ const Transactions = () => {
                   <InputSelect
                     name="accountDestiny"
                     title="Destination account"
-                    options={client.accounts.filter((account) => account.number !== selectRef.current).map((account) => account.number)}
-                    onChange={handleAccountDestinyChange}
+                    options={client.accounts.filter((account) => account.number !== accountOrigin).map((account) => account.number)}
+                    onChange={(e) => setAccountDestiny(e.target.value)}
                   />
                 </>
               ) : (
-                <LabelInput type="text" name="accountNumber" title="Account number" onChange={handleAccountNumberChange} />
+                <LabelInput
+                  type="text"
+                  name="accountNumber"
+                  title="Account number"
+                  onChange={(e) => setAccountNumber(e.target.value)}
+                />
               )}
             </div>
-            <LabelInput type="number" name="amount" title="Amount" onChange={handleAmountChange} />
-            <LabelInput type="text" name="description" title="Description" onChange={handleDescriptionChange} />
-            <button type="submit" className="inline-block w-full px-5 py-3 font-medium text-white bg-black rounded-lg sm:w-auto">
+            <FormattedNumberInput
+              name="amount"
+              title="Amount"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+            />
+            <LabelInput
+              type="text"
+              name="description"
+              title="Description"
+              onChange={(e) => setDescription(e.target.value)}
+            />
+            <button
+              type="submit"
+              className="inline-block w-full px-5 py-3 font-medium text-white bg-black rounded-lg sm:w-auto"
+            >
               Send Enquiry
             </button>
           </form>
