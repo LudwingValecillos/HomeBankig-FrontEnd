@@ -17,7 +17,7 @@ const Card = (promps) => {
     <div className="perspective-1000">
       <div
         className={`Card w-[338px] h-48 p-4 text-2xl rounded-2xl flex flex-col justify-between ${color} ${
-          colorRecibido === "BLACK" || colorRecibido === "TITANIUM" 
+           colorRecibido === "TITANIUM" 
             ? "text-white"
             : "text-black"
         } card relative`}

@@ -11,13 +11,12 @@ import Buttom from "../components/Buttom";
 const Main = () => {
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
-  // const client = useSelector((state) => state.authentication.client);
   const client = useSelector((state) => state.client.client);
   const status = useSelector((state) => state.client.status);
   console.log(client);
 
   // window.scrollTo(0, 0);
-
+  
   if (client.firstName === "") {
     dispatch(loadClient());
   }
