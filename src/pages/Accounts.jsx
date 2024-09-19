@@ -6,6 +6,7 @@ import SpamInformativo from "../components/SpamInformativo";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loadClient } from "../redux/actions/clientAction";
+import Buttom from "../components/Buttom";
 
 const Main = () => {
   const [error, setError] = useState(null);
@@ -14,18 +15,12 @@ const Main = () => {
   const client = useSelector((state) => state.client.client);
   const status = useSelector((state) => state.client.status);
   console.log(client);
-  console.log(status);
 
-  window.scrollTo(0, 0);
+  // window.scrollTo(0, 0);
 
-  useEffect(() => {
-
-      dispatch(loadClient())
-        .unwrap() // Esto te permitirá manejar el resultado del thunk en caso de error o éxito
-        .catch((error) => setError(error.message));
-  }, [dispatch]);
-  
-  
+  if (client.firstName === "") {
+    dispatch(loadClient());
+  }
 
   if (error) {
     return <p>{error}</p>; // Mostrar mensaje de error si ocurre
@@ -45,7 +40,7 @@ const Main = () => {
         text3="Enjoy a hassle-free banking experience! 🚀"
         imgSrc="/public/Finance.png"
       />
-      <div className="flex flex-wrap gap-4 my-10 px-80 justify-evenly bg-[#81ccc1bd] m-5 rounded-3xl p-5 shadow-2xl">
+      <div className="flex flex-wrap gap-4 my-10 lg:px-80 justify-evenly bg-[#81ccc1bd] m-5 rounded-3xl p-5 shadow-2xl">
         <h2 className="w-full text-center border-b-2 border-[#111827] px-1 pb-4 text-4xl font-medium text-[#111827]">
           Accounts
         </h2>
@@ -58,6 +53,12 @@ const Main = () => {
             />
           </Link>
         ))}
+        <button
+          type="submit"
+          className="inline-block w-full px-5 py-3 font-medium text-white bg-black rounded-lg" onChange={ (e) => console.log(e.target.value) }
+           >
+          Enter
+        </button>
       </div>
       <Banner />
       <Carousel />

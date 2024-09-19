@@ -1,19 +1,3 @@
-// import { createAction } from "@reduxjs/toolkit";
-
-// export const loadClient = createAction("loadClient", (data) => {
-  
-//   const clients = data;
-//   return {
-//     payload: clients,
-//   };
-// });
-
-// export const addCardToClient = createAction("addCardToClient", (newCard) => {
-//   return {
-//     payload: newCard,
-//   }
-// });
-
 import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 

@@ -12,20 +12,17 @@ const Cards = () => {
 
   const dispatch = useDispatch();
 
-
   const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
-     
+
     if (client.firstName === "") {
-      
       dispatch(loadClient())
         .unwrap() // Esto te permitirá manejar el resultado del thunk en caso de error o éxito
         .catch((error) => setError(error.message));
     }
-    
-  }, [ dispatch, client.firstName]);
+  }, [dispatch, client.firstName]);
 
   return (
     <>
@@ -36,11 +33,7 @@ const Cards = () => {
         text3="Explore your options and maintain full control of your cards from one place! 🚀"
         imgSrc="/public/Payment.png"
       />
-      {client.cards.length !== 0 ? (
-        <PrintCard client={client} />
-      ) : (
-      ""
-      )}
+      {client.cards.length !== 0 ? <PrintCard client={client} /> : ""}
       <Banner />
       <Carousel />
     </>

@@ -119,10 +119,10 @@ const Loans = () => {
         text3="Explore the available options and request your loan today!"
         imgSrc="/public/loan.png"
       />
-      <div className="bg-[#69c2b6d7] m-10 rounded-3xl shadow-2xl p-10">
-        <div className="flex py-5 justify-evenly">
+      <div className="bg-[#69c2b6d7] m-3 p-2 rounded-3xl shadow lg:m-10 lg:shadow-2xl lg:p-10">
+        <div className="flex flex-col lg:flex-row lg:py-5 justify-evenly">
           {simplifiedLoans.length === 0 ? (
-            <div className="flex items-center justify-center w-1/2">
+            <div className="flex items-center justify-center lg:w-1/2">
               <h2 className="text-3xl text-center bg-white m-5 p-5 rounded-3xl shadow-2xl">
                 You don't have any active loans yet! Take this opportunity to
                 request your first loan and get the financial support you need.
@@ -131,7 +131,7 @@ const Loans = () => {
               </h2>
             </div>
           ) : (
-            <div className="flex items-center justify-center w-1/2">
+            <div className="flex items-center  justify-center lg:w-1/2">
               <Table
                 title="Loans"
                 ths={["Type", "Amount", "Payments"]}
@@ -146,7 +146,7 @@ const Loans = () => {
                 onSubmit={handleSubmit}
                 className="p-10 flex flex-col gap-3 bg-[#c0c5ca7a] text-4xl rounded-3xl shadow-2xl items-center"
               >
-                <h2 className="text-5xl text-center border-b-2 border-black">
+                <h2 className="lg:text-5xl text-center border-b-2 border-black">
                   Request a loan
                 </h2>
 
@@ -190,7 +190,7 @@ const Loans = () => {
               </form>
             ) : (
               <div className="flex items-center justify-center w-1/2">
-                <h2 className="text-3xl text-center border-blue-400 border-8 bg-white m-5 p-5 rounded-3xl shadow-2xl">
+                <h2 className="text-xl text-center m-2 p-2 border-blue-400 border-8 bg-white lg:m-5 lg:p-5 rounded-3xl shadow-2xl lg:text-3xl">
                   You have reached the limit of loans you can request.
                 </h2>
               </div>

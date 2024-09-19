@@ -8,7 +8,6 @@ import { loginAction } from "../redux/actions/authenticationAction";
 import { loadClient } from "../redux/actions/clientAction";
 import PasswordInput from "../components/PasswordInput";
 
-
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,12 +17,17 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     const user = { email, password };
-    
+
     try {
-      const res = await axios.post("http://localhost:8080/api/auth/login", user);
+      const res = await axios.post(
+        "http://localhost:8080/api/auth/login",
+        user
+      );
       localStorage.setItem("token", res.data);
-      
+      console.log(res.data);
+
       navigate("/accounts/");
+      dispatch(loadClient());
     } catch (err) {
       console.error(err);
     }
@@ -39,7 +43,11 @@ const Login = () => {
             className="absolute inset-0 object-cover w-full h-full opacity-90"
           />
           <div className="hidden lg:relative lg:block lg:p-12">
-            <img src="/public/unnamed.jpeg" alt="" className="w-20 rounded-full" />
+            <img
+              src="/public/unnamed.jpeg"
+              alt=""
+              className="w-20 rounded-full"
+            />
             <h2 className="mt-6 text-2xl font-bold text-white sm:text-3xl md:text-4xl">
               Welcome to QuantumBank
             </h2>
@@ -66,8 +74,11 @@ const Login = () => {
                 title="Password"
                 onChange={(e) => setPassword(e.target.value)}
               />
-            
-              <button type="submit" className="inline-block w-full px-5 py-3 font-medium text-white bg-black rounded-lg">
+
+              <button
+                type="submit"
+                className="inline-block w-full px-5 py-3 font-medium text-white bg-black rounded-lg"
+              >
                 Enter
               </button>
               <Button href="#" title="Forgot my password" />

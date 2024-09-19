@@ -15,12 +15,12 @@ const AddCard = () => {
   const [cardColor, setCardColor] = useState("GOLD");
   const client = useSelector((state) => state.client.client);
   const dispatch = useDispatch();
-  
+
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-  
+
     if (token) {
       axios
         .get("http://localhost:8080/api/auth/current", {
@@ -36,7 +36,6 @@ const AddCard = () => {
         });
     }
   }, [dispatch]);
-  
 
   if (!client) {
     return <p>Loading client data...</p>;
@@ -44,13 +43,13 @@ const AddCard = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     const token = localStorage.getItem("token");
     const card = {
       color: cardColor,
       type: cardType.toUpperCase(),
     };
-  
+
     axios
       .post("http://localhost:8080/api/cards/clients/current/cards", card, {
         headers: {
@@ -61,31 +60,34 @@ const AddCard = () => {
         console.log(res);
         alert("Se ha agregado una nueva tarjeta");
         console.log(res.data);
-        
+
         dispatch(addCardToClient(res.data));
 
         navigate("/cards");
-  
       })
       .catch((err) => {
         console.log(err);
         alert(err);
       });
-  };   
-  
-const availableColors = ["GOLD", "SILVER", "TITANIUM"];  // Lista de colores posibles
+  };
 
-const colorDebitCard = client.cards
-  .filter((card) => card.type === "DEBIT")
-  .map((card) => card.color);
+  const availableColors = ["GOLD", "SILVER", "TITANIUM"]; // Lista de colores posibles
 
-const colorCreditCard = client.cards
-  .filter((card) => card.type === "CREDIT")
-  .map((card) => card.color);
+  const colorDebitCard = client.cards
+    .filter((card) => card.type === "DEBIT")
+    .map((card) => card.color);
 
-const availableColorsForDebit = availableColors.filter((color) => !colorDebitCard.includes(color));
+  const colorCreditCard = client.cards
+    .filter((card) => card.type === "CREDIT")
+    .map((card) => card.color);
 
-const availableColorsForCredit = availableColors.filter((color) => !colorCreditCard.includes(color));
+  const availableColorsForDebit = availableColors.filter(
+    (color) => !colorDebitCard.includes(color)
+  );
+
+  const availableColorsForCredit = availableColors.filter(
+    (color) => !colorCreditCard.includes(color)
+  );
 
   return (
     <div>
@@ -128,8 +130,12 @@ const availableColorsForCredit = availableColors.filter((color) => !colorCreditC
               <InputSelect
                 name="Color"
                 title="Color"
-                options={cardType == "DEBIT" ? availableColorsForDebit : availableColorsForCredit}
-                onChange={((e) => setCardColor(e.target.value))}
+                options={
+                  cardType == "DEBIT"
+                    ? availableColorsForDebit
+                    : availableColorsForCredit
+                }
+                onChange={(e) => setCardColor(e.target.value)}
               />
               <button
                 type="submit"

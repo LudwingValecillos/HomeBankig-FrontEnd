@@ -18,13 +18,12 @@ const AccountDetails = () => {
 
   const navigate = useNavigate();
 
-  if(client.firstName === ""){
+  if (client.firstName === "") {
     dispatch(loadClient())
       .unwrap() // Esto te permitira manejar el resultado del thunk en caso de error o exito
       .catch((error) => console.log(error));
   }
 
-    
   // Find the account by id
   const acc = client.accounts.find(
     (account) => account.id === parseInt(id, 10)
@@ -54,8 +53,8 @@ const AccountDetails = () => {
         text3="✨ Navigate with confidence and discover all the options available to you, designed to offer you an unparalleled banking experience! 🚀"
         imgSrc="/public/accountDetails.png"
       />
-      <div className="flex items-center justify-center gap-10 p-10 bg-[#A2D9D1] m-5 rounded-3xl shadow" >
-        <div className="w-1/2 px-40 AccountDetails">
+      <div className="flex flex-col lg:flex-row items-center justify-center gap-2 lg:gap-10 lg:p-10 bg-[#A2D9D1] m-5 rounded-3xl shadow">
+        <div className="p-2 lg:w-1/2 lg:px-40 AccountDetails">
           <Account
             account={acc.number}
             balance={acc.balance}
@@ -64,14 +63,16 @@ const AccountDetails = () => {
         </div>
         {acc.transactions.length === 0 ? (
           <div className="flex flex-col gap-4 justify-center items-center bg-[#dad8f8d8] p-10 rounded-3xl">
-          <p className="text-2xl">No transactions available.</p>
-          <Link to="/transactions"><Buttom title="Make a transfer" isActive={false}/></Link>
+            <p className="text-2xl">No transactions available.</p>
+            <Link to="/transactions">
+              <Buttom title="Make a transfer" isActive={false} />
+            </Link>
           </div>
         ) : (
-          <div className="w-1/2 Transactions">
+          <div className="w-full p-2 lg:w-1/2 Transactions">
             <Table
               title="Transactions"
-              ths={["Type", "Amount", "Date","Hour", "Description"]}
+              ths={["Type", "Amount", "Date", "Hour", "Description"]}
               tds={simplifiedAccount}
             />
           </div>

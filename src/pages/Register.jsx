@@ -30,35 +30,40 @@ const Register = () => {
     // }
   };
 
- 
-
   const handleSubmit = (event) => {
     event.preventDefault();
-    
-  
 
-    
-    if (formData.password == formData.confirmPassword && formData.password !== "" && formData.email !== "" && formData.firstName !== "" && formData.lastName !== "") {
+    if (
+      formData.password == formData.confirmPassword &&
+      formData.password !== "" &&
+      formData.email !== "" &&
+      formData.firstName !== "" &&
+      formData.lastName !== ""
+    ) {
       console.log(formData);
       console.log("Submit");
       formData.email = formData.email.toLowerCase();
       sendPutRequest(formData);
-    }else{
-      alert("Complete todos los campos")
+    } else {
+      alert("Complete todos los campos");
     }
   };
 
   const sendPutRequest = async (data) => {
     try {
-      const response = await axios.post('http://localhost:8080/api/auth/register', data, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      console.log('Response:', response.data);
-      navigate('/login');
+      const response = await axios.post(
+        "http://localhost:8080/api/auth/register",
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("Response:", response.data);
+      navigate("/login");
     } catch (error) {
-      console.error('There was an error!', error);
+      console.error("There was an error!", error);
     }
   };
 
@@ -144,8 +149,8 @@ const Register = () => {
                 <p className="text-red-500">Las contraseñas no coinciden</p>
               )}
               <button
-                type="submit" 
-                className="inline-block w-full px-5 py-3 font-medium text-white bg-black rounded-lg sm:w-auto" 
+                type="submit"
+                className="inline-block w-full px-5 py-3 font-medium text-white bg-black rounded-lg sm:w-auto"
               >
                 Sign up
               </button>

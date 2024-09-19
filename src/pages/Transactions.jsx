@@ -19,45 +19,46 @@ const Transactions = () => {
   const [description, setDescription] = useState("");
   const dispatch = useDispatch();
 
-
   const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
-     
+
     if (client.firstName === "") {
       dispatch(loadClient())
         .unwrap() // Esto te permitirá manejar el resultado del thunk en caso de error o éxito
         .catch((error) => setError(error.message));
     }
-    
-  }, [ dispatch, client.firstName]);
+  }, [dispatch, client.firstName]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const trans = {
       amount: amount,
-      description : description,
+      description: description,
       sourceAccount: accountOrigin,
       destinationAccount: accountDestiny,
     };
 
     try {
       const token = localStorage.getItem("token");
-      await axios.post("http://localhost:8080/api/transactions/clients/current/transactions", trans, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      await axios.post(
+        "http://localhost:8080/api/transactions/clients/current/transactions",
+        trans,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       alert("Transaction successful");
       dispatch(loadClient())
         .unwrap()
         .catch((error) => setError(error.message));
-      
     } catch (error) {
       alert(error);
-      alert(error)
+      alert(error);
     }
   };
 
@@ -70,24 +71,32 @@ const Transactions = () => {
         text3="Explore your options and manage your finances with ease and efficiency!"
         imgSrc="/public/transactions.png"
       />
-      <div className="flex bg-[#C4DFFE] m-10 rounded-3xl shadow-2xl p-5">
-        <div className="w-1/2">
+      <div className="flex flex-col gap-2 lg:gap-0 lg:flex-row  bg-[#C4DFFE] m-10 rounded-3xl shadow-2xl p-5">
+        <div className="lg:w-1/2">
           <img src="/public/transactionsdiv.png" alt="Transaction" />
         </div>
 
-        <div className="flex items-center justify-center w-1/2">
+        <div className="flex items-center justify-center lg:w-1/2">
           <form
             onSubmit={handleSubmit}
             className="h-[550px] p-10 flex flex-col justify-between gap-3 bg-[#c0c5ca7a] text-4xl rounded-3xl shadow-2xl items-center"
           >
-            <h2 className="text-5xl text-center border-b-2 border-black">Transfer</h2>
+            <h2 className="lg:text-5xl text-center border-b-2 border-black">
+              Transfer
+            </h2>
             <div className="flex items-center justify-between gap-3">
               <Radio
                 options={["Own", "Others"]}
                 onChange={(e) => setTransactionType(e.target.value)}
               />
             </div>
-            <div className={`flex gap-3 items-center ${transactionType === "Others" || !transactionType ? "flex-col" : ""}`}>
+            <div
+              className={`flex gap-3 items-center ${
+                transactionType === "Others" || !transactionType
+                  ? "flex-col"
+                  : ""
+              }`}
+            >
               <InputSelect
                 name="accountOrigin"
                 title="Account of origin"
@@ -99,14 +108,27 @@ const Transactions = () => {
               />
               {transactionType === "Own" ? (
                 <>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25L21 12m0 0-3.75 3.75M21 12H3" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M17.25 8.25L21 12m0 0-3.75 3.75M21 12H3"
+                    />
                   </svg>
 
                   <InputSelect
                     name="accountDestiny"
                     title="Destination account"
-                    options={client.accounts.filter((account) => account.number !== accountOrigin).map((account) => account.number)}
+                    options={client.accounts
+                      .filter((account) => account.number !== accountOrigin)
+                      .map((account) => account.number)}
                     onChange={(e) => setAccountDestiny(e.target.value)}
                   />
                 </>
@@ -115,7 +137,7 @@ const Transactions = () => {
                   type="text"
                   name="accountNumber"
                   title="Account number"
-                  onChange={(e) => setAccountNumber(e.target.value)}
+                  onChange={(e) => setAccountDestiny(e.target.value)}
                 />
               )}
             </div>
@@ -133,7 +155,7 @@ const Transactions = () => {
             />
             <button
               type="submit"
-              className="inline-block w-full px-5 py-3 font-medium text-white bg-black rounded-lg sm:w-auto"
+              className="inline-block w-full text-xl px-5 py-3 font-medium text-white bg-black rounded-lg sm:w-auto"
             >
               Send Enquiry
             </button>
