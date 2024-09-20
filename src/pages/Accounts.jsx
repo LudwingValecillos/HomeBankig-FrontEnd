@@ -43,9 +43,9 @@ const Main = () => {
     });
   };
 
-  if (client.firstName === "") {
-    dispatch(loadClient());
-  }
+  // if (client.firstName === "") {
+  //   dispatch(loadClient());
+  // }
 
   if (error) {
     return <p>{error}</p>; // Mostrar mensaje de error si ocurre
