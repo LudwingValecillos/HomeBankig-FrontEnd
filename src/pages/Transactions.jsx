@@ -43,7 +43,7 @@ const Transactions = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.post(
-        "http://localhost:8080/api/transactions/clients/current/transactions",
+        "https://homebankig.onrender.com/api/transactions/clients/current/transactions",
         trans,
         {
           headers: {

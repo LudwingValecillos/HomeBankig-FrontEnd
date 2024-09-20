@@ -1,5 +1,6 @@
 import React from "react";
 import "../styles/card.css";
+import chip from "../assets/chip.jpg" 
 
 const Card = (promps) => {
   const colorRecibido = promps.color;
@@ -24,8 +25,8 @@ const Card = (promps) => {
       >
         <div className="absolute inset-0 flex flex-col justify-between p-4 card-front rounded-2xl">
           <div className="flex justify-between">
-            <img src="/public/chip.jpg" alt="" className="chip w-14" />
-            <h2 className="text-sm">{promps.type} CARD </h2>
+          <img src={chip} alt="" className={`chip w-14 ${colorRecibido === "GOLD" ? " border-[#ffffff7a] border-2 rounded-md" : " "}`} />
+          <h2 className="text-sm">{promps.type} CARD </h2>
           </div>
           <p>{promps.number}</p>
           <p className="text-sm">{promps.number.slice(-4)} </p>

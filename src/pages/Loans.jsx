@@ -28,7 +28,7 @@ const Loans = () => {
       const token = localStorage.getItem("token");
 
       axios
-        .get("http://localhost:8080/api/loans/loansAvailable", {
+        .get("https://homebankig.onrender.com/api/loans/loansAvailable", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
