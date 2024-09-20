@@ -4,11 +4,12 @@ import Button from "../components/Buttom";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { loadClient } from "../redux/actions/clientAction";
 import PasswordInput from "../components/PasswordInput";
 import Swal from "sweetalert2";
 import logo from "../assets/unnamed.jpeg";
 import img  from "../assets/bank1.jpeg";
+import { loadClient } from "../redux/actions/clientAction";
+
 
 
 const Login = () => {
