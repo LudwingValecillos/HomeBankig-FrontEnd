@@ -5,7 +5,8 @@ import Carousel from "../components/Carousel";
 import SpamInformativo from "../components/SpamInformativo";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loadClient } from "../redux/actions/clientAction";
+import { loadClient, addAccountToClient } from "../redux/actions/clientAction";
+import Swal from "sweetalert2";
 import Buttom from "../components/Buttom";
 
 const Main = () => {
@@ -15,8 +16,33 @@ const Main = () => {
   const status = useSelector((state) => state.client.status);
   console.log(client);
 
-  // window.scrollTo(0, 0);
-  
+  // window.scrollTo(0, 10);
+
+  const showError = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to create an account?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, create it",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(addAccountToClient())
+          .unwrap()
+          .catch((error) => setError(error.message));
+        console.log(error);
+
+        Swal.fire({
+          title: "Congratulations!",
+          text: "Your account has been created successfully!",
+          icon: "success",
+        });
+      }
+    });
+  };
+
   if (client.firstName === "") {
     dispatch(loadClient());
   }
@@ -39,7 +65,7 @@ const Main = () => {
         text3="Enjoy a hassle-free banking experience! 🚀"
         imgSrc="/public/Finance.png"
       />
-      <div className="flex flex-wrap gap-4 my-10 lg:px-80 justify-evenly bg-[#81ccc1bd] m-5 rounded-3xl p-5 shadow-2xl">
+      <div className="flex flex-wrap gap-4 my-10 lg:px-80 justify-evenly bg-[#81ccc1bd] m-5 rounded-3xl p-5 shadow-2xl transition duration-300">
         <h2 className="w-full text-center border-b-2 border-[#111827] px-1 pb-4 text-4xl font-medium text-[#111827]">
           Accounts
         </h2>
@@ -52,12 +78,18 @@ const Main = () => {
             />
           </Link>
         ))}
-        <button
-          type="submit"
-          className="inline-block w-full px-5 py-3 font-medium text-white bg-black rounded-lg" onChange={ (e) => console.log(e.target.value) }
-           >
-          Enter
-        </button>
+        {client.accounts?.length === 3 ? (
+          ""
+        ) : (
+          <div className="w-full text-end p-5">
+            <button
+              className="bg-black p-5 font-bold text-white rounded-3xl transition duration-300 border-4 border-blue-300 hover:bg-white hover:text-black  "
+              onClick={showError}
+            >
+              Create Account
+            </button>
+          </div>
+        )}
       </div>
       <Banner />
       <Carousel />

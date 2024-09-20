@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loginAction } from "../redux/actions/authenticationAction";
 import { addCardToClient } from "../redux/actions/clientAction";
+import Swal from "sweetalert2";
 
 const AddCard = () => {
   const [cardType, setCardType] = useState("CREDIT");
@@ -18,27 +19,25 @@ const AddCard = () => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
+  if (client.firstName === "") {
+    dispatch(loginAction());
+  }
+  const alertSuccess = (msg) => {
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title: msg + " card created",
+      showConfirmButton: false,
+      timer: 2500,
+    });
+  };
 
-    if (token) {
-      axios
-        .get("http://localhost:8080/api/auth/current", {
-          headers: {
-            Authorization: `Bearer ${token}`, // Incluye el token en el header Authorization
-          },
-        })
-        .then((response) => {
-          dispatch(loadClient(response.data)); // Cambiar a loadClient
-        })
-        .catch((error) => {
-          console.error("Error fetching client data:", error);
-        });
-    }
-  }, [dispatch]);
-
-  if (!client) {
-    return <p>Loading client data...</p>;
+  const alertError = (msg) =>{
+    Swal.fire({
+      title: "Oops! Something Went Wrong",
+      text: msg,
+      icon: "error"
+    });
   }
 
   const handleSubmit = (e) => {
@@ -57,17 +56,12 @@ const AddCard = () => {
         },
       })
       .then((res) => {
-        console.log(res);
-        alert("Se ha agregado una nueva tarjeta");
-        console.log(res.data);
-
         dispatch(addCardToClient(res.data));
-
+        alertSuccess(res.data.type);
         navigate("/cards");
       })
       .catch((err) => {
-        console.log(err);
-        alert(err);
+        alertError(err.response.data);
       });
   };
 
@@ -94,8 +88,6 @@ const AddCard = () => {
       <SpamInformativo
         title={`Add a New Card`}
         text1="✨ Welcome to the creation view of your new bank card. Here, you can bring a new card to life that will accompany you on your financial adventures. 💳"
-        text2="👋 Complete the necessary details and, in the blink of an eye, you'll have your new card ready to use. Convenience and control are at your fingertips."
-        text3="💼 Remember, every card you create is another key to a future full of opportunities. Do it with confidence and style! 🚀"
         imgSrc="/public/addCard.png"
       />
       <div className="flex items-center justify-center py-10 text-xl">
@@ -117,7 +109,7 @@ const AddCard = () => {
               className=" p-10 flex flex-col gap-3 bg-[#c0c5cad3] text-4xl rounded-3xl shadow-2xl items-center "
             >
               <h2 className="text-5xl text-center border-b-2 border-black">
-                Generar tarjeta
+                Generate Card
               </h2>
               <div className="flex items-center justify-between gap-3">
                 <Radio

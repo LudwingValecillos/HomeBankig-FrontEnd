@@ -18,7 +18,7 @@ const Table = (props) => {
                 {props.ths.map((th) => (
                   <th
                     key={th}
-                    className="p-1  lg:px-4 lg:py-2 text-gray-900 whitespace-nowrap"
+                    className= {`p-1  lg:px-4 lg:py-2 text-gray-900 whitespace-nowrap ${th == "Amount" ? "text-right" : ""} ${th == "Type" || th == "Description" ? "text-left" : ""} `}
                   >
                     {th}
                   </th>

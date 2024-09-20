@@ -1,5 +1,5 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { addCardToClient, loadClient } from "../actions/clientAction"; // Asegúrate de importar correctamente
+import { addAccountToClient, addCardToClient, loadClient } from "../actions/clientAction"; // Asegúrate de importar correctamente
 
 const initialState = {
   client: {
@@ -62,6 +62,9 @@ const clientReducer = createReducer(initialState, (builder) => {
     .addCase(loadClient.rejected, (state, action) => {
       state.status = "failed";
       state.error = action.payload;
+    })
+    .addCase(addAccountToClient.fulfilled, (state, action) => {
+      state.client.accounts.push(action.payload); 
     })
     .addCase(addCardToClient, (state, action) => {
       state.client.cards.push(action.payload);

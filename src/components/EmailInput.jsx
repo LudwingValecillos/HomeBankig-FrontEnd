@@ -15,7 +15,7 @@ const EmailInput = ({ name, title, onChange }) => {
 
   const handleBlur = () => {
     if (!validateEmail(inputValue)) {
-      setError("Correo electrónico inválido");
+      setError("Invalid email");
     } else {
       setError("");
     }

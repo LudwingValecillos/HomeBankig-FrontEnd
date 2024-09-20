@@ -41,7 +41,7 @@ const FormattedNumberInput = ({ name, title, value, onChange }) => {
         id={name}
         name={name}
         value= {"$ "+ inputValue}
-        className="peer w-full border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0"
+        className="peer w-full border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 text-end"
         placeholder={title}
         onChange={handleChange}
         autoComplete="off"

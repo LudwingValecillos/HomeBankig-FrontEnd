@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import LabelInput from "../components/LabelInput";
-import Button from "../components/Buttom";
+import Button from "../components/Buttom"; // Asegúrate de que el nombre sea correcto
 import PasswordInput from "../components/PasswordInput";
 import EmailInput from "../components/EmailInput";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -14,8 +15,15 @@ const Register = () => {
     password: "",
     confirmPassword: "",
   });
-  const [passwordMatch, setPasswordMatch] = useState();
+  const [passwordMatch, setPasswordMatch] = useState(true);
+
   const navigate = useNavigate();
+
+  // Verificar si las contraseñas coinciden cada vez que cambien
+  useEffect(() => {
+    const { password, confirmPassword } = formData;
+    setPasswordMatch(password === confirmPassword || confirmPassword === "");
+  }, [formData.password, formData.confirmPassword]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,21 +31,16 @@ const Register = () => {
       ...formData,
       [name]: value,
     });
-
-    // // Solo validar contraseñas si ambas están ingresadas
-    // if (name === "password" || name === "confirmPassword") {
-    //   validatePasswords();
-    // }
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
     if (
-      formData.password == formData.confirmPassword &&
+      formData.password === formData.confirmPassword &&
       formData.password !== "" &&
       formData.email !== "" &&
-      formData.firstName !== "" &&
+      formData.firstName !== ""  &&
       formData.lastName !== ""
     ) {
       console.log(formData);
@@ -45,9 +48,11 @@ const Register = () => {
       formData.email = formData.email.toLowerCase();
       sendPutRequest(formData);
     } else {
-      alert("Complete todos los campos");
+     
+      alertWarning();
     }
   };
+
 
   const sendPutRequest = async (data) => {
     try {
@@ -63,9 +68,25 @@ const Register = () => {
       console.log("Response:", response.data);
       navigate("/login");
     } catch (error) {
-      console.error("There was an error!", error);
+      alertError(error.response.data);
     }
   };
+const alertWarning = () => {
+  Swal.fire({
+    title: "Oops! Something Went Wrong",
+    text: "Please complete all fields",
+    icon: "warning",
+  });
+};
+
+  const alertError = (msg) => {
+    Swal.fire({
+      title: "Oops! Something Went Wrong",
+      text: msg,
+      icon: "error",
+    });
+  };
+
 
   return (
     <section className="bg-white">
@@ -145,8 +166,8 @@ const Register = () => {
                 value={formData.confirmPassword}
                 onChange={handleChange}
               />
-              {!passwordMatch === false && (
-                <p className="text-red-500">Las contraseñas no coinciden</p>
+              {!passwordMatch && (
+                <p className="text-red-500">Passwords do not match</p>
               )}
               <button
                 type="submit"

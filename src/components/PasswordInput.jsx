@@ -8,11 +8,11 @@ const validatePassword = (password) => {
   const isValidLength = password.length >= 8;
 
   const errors = [];
-  if (!hasUpperCase) errors.push("Debe contener al menos una mayúscula.");
-  if (!hasLowerCase) errors.push("Debe contener al menos una minúscula.");
-  if (!hasNumber) errors.push("Debe contener al menos un número.");
-  if (!hasSpecialChar) errors.push("Debe contener al menos un símbolo.");
-  if (!isValidLength) errors.push("Debe tener al menos 8 caracteres.");
+  if (!hasUpperCase) errors.push("Must contain at least one uppercase letter.");
+if (!hasLowerCase) errors.push("Must contain at least one lowercase letter.");
+if (!hasNumber) errors.push("Must contain at least one number.");
+if (!hasSpecialChar) errors.push("Must contain at least one symbol.");
+if (!isValidLength) errors.push("Must be at least 8 characters.");
 
   return errors;
 };

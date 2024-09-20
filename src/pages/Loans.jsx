@@ -8,6 +8,7 @@ import FormattedNumberInput from "../components/FormattedNumberInput";
 import { useDispatch, useSelector } from "react-redux";
 import { loadClient } from "../redux/actions/clientAction";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const Loans = () => {
   const [transactionType, setTransactionType] = useState("");
@@ -40,13 +41,10 @@ const Loans = () => {
     }
   }, [client.loans]);
 
-  useEffect(() => {
-    if (!client.firstName) {
-      dispatch(loadClient())
-        .unwrap()
-        .catch((error) => console.error(error.message));
-    }
-  }, [client.firstName, dispatch]);
+  if (client.firstName === "") {
+    dispatch(loadClient());
+  }
+
 
   const simplifiedLoans = Array.isArray(client.loans)
     ? client.loans.map((loan) => ({
@@ -55,6 +53,24 @@ const Loans = () => {
         payments: loan.payments,
       }))
     : [];
+
+  const alertSuccess = () => {
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title: "Loan applied",
+      showConfirmButton: false,
+      timer: 2500,
+    });
+  };
+
+  const alertError = (msg) =>{
+    Swal.fire({
+      title: "Oops! Something Went Wrong",
+      text: msg,
+      icon: "error"
+    });
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -77,12 +93,12 @@ const Loans = () => {
         },
       })
       .then((response) => {
-        alert("Loan applied successfully");
+        alertSuccess()
         dispatch(loadClient());
         navigate("/accounts/");
       })
       .catch((error) => {
-        console.error("Error applying loan:", error);
+        alertError(error.response.data)
       });
   };
 
@@ -107,6 +123,13 @@ const Loans = () => {
   };
 
   const handleAmountChange = (e) => {
+    const selectedLoanData = loansAvailable.find(
+      (loan) => loan.name === transactionType
+    );
+    if (e.target.value > selectedLoanData.maxAmount) {
+      alertError("The maximum amount is " + selectedLoanData.maxAmount.toLocaleString());
+      
+    }
     setAmount(e.target.value);
   };
 
@@ -124,10 +147,9 @@ const Loans = () => {
           {simplifiedLoans.length === 0 ? (
             <div className="flex items-center justify-center lg:w-1/2">
               <h2 className="text-3xl text-center bg-white m-5 p-5 rounded-3xl shadow-2xl">
-                You don't have any active loans yet! Take this opportunity to
-                request your first loan and get the financial support you need.
-                Our process is fast, simple, and designed to help you every step
-                of the way. Explore the available options and get started today!
+                You don't have any active loans yet! Request your first loan now
+                for quick and easy financial support. Explore your options and
+                get started today!
               </h2>
             </div>
           ) : (
@@ -185,7 +207,7 @@ const Loans = () => {
                   type="submit"
                   className="inline-block w-full px-5 py-3 font-medium text-white bg-black rounded-lg sm:w-auto"
                 >
-                  Send Enquiry
+                  Apply
                 </button>
               </form>
             ) : (

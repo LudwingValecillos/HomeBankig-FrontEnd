@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import FormattedNumberInput from "../components/FormattedNumberInput";
 import { loadClient } from "../redux/actions/clientAction";
+import Swal from "sweetalert2";
 
 const Transactions = () => {
   const client = useSelector((state) => state.client.client);
@@ -21,15 +22,11 @@ const Transactions = () => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-
-    if (client.firstName === "") {
-      dispatch(loadClient())
-        .unwrap() // Esto te permitirá manejar el resultado del thunk en caso de error o éxito
-        .catch((error) => setError(error.message));
-    }
-  }, [dispatch, client.firstName]);
+  if (client.firstName === "") {
+    dispatch(loadClient())
+      .unwrap() // Esto te permitirá manejar el resultado del thunk en caso de error o éxito
+      .catch((error) => setError(error.message));
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -52,16 +49,33 @@ const Transactions = () => {
           },
         }
       );
-      alert("Transaction successful");
       dispatch(loadClient())
         .unwrap()
         .catch((error) => setError(error.message));
+      alertSuccess();
+      navigate("/accounts/");
     } catch (error) {
-      alert(error);
-      alert(error);
+      alertError(error.response.data);
     }
   };
 
+  const alertSuccess = () => {
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title: " Transaction created",
+      showConfirmButton: false,
+      timer: 2500,
+    });
+  };
+
+  const alertError = (msg) => {
+    Swal.fire({
+      title: "Oops! Something Went Wrong",
+      text: msg,
+      icon: "error",
+    });
+  };
   return (
     <>
       <InformativeSpam
@@ -106,6 +120,18 @@ const Transactions = () => {
                   setAccountDestiny("");
                 }}
               />
+              <p className="text-2xl">
+                {" "}
+                {` ${
+                  accountOrigin
+                    ? `$ ${
+                        client.accounts.find(
+                          (acc) => acc.number === accountOrigin
+                        )?.balance.toLocaleString()
+                      } `
+                    : ""
+                } `}{" "}
+              </p>
               {transactionType === "Own" ? (
                 <>
                   <svg
@@ -157,7 +183,7 @@ const Transactions = () => {
               type="submit"
               className="inline-block w-full text-xl px-5 py-3 font-medium text-white bg-black rounded-lg sm:w-auto"
             >
-              Send Enquiry
+              Transfer
             </button>
           </form>
         </div>

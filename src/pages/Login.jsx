@@ -7,12 +7,14 @@ import { useDispatch } from "react-redux";
 import { loginAction } from "../redux/actions/authenticationAction";
 import { loadClient } from "../redux/actions/clientAction";
 import PasswordInput from "../components/PasswordInput";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -27,8 +29,15 @@ const Login = () => {
       navigate("/accounts/");
       dispatch(loadClient());
     } catch (err) {
-      console.error(err);
+      alertError(err.response.data)
     }
+  };
+  const alertError = (msg) => {
+    Swal.fire({
+      title: "Oops! Something Went Wrong",
+      text: msg,
+      icon: "error",
+    });
   };
 
   return (
