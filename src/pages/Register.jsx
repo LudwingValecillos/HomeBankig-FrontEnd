@@ -6,6 +6,8 @@ import PasswordInput from "../components/PasswordInput";
 import EmailInput from "../components/EmailInput";
 import axios from "axios";
 import Swal from "sweetalert2";
+import img from "../assets/bank2.jpeg";
+
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -99,7 +101,7 @@ const alertWarning = () => {
           />
           <div className="hidden lg:relative lg:block lg:p-12">
             <img
-              src="/public/unnamed.jpeg"
+              src={img}
               alt=""
               className="w-20 rounded-full"
             />
