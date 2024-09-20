@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import SpamInformativo from "../components/SpamInformativo";
 import InputSelect from "../components/InputSelect";
 import Radio from "../components/inputs/Radio";
-import LabelInput from "../components/LabelInput";
 import axios from "axios";
 import Card from "../components/Card";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loginAction } from "../redux/actions/authenticationAction";
-import { addCardToClient } from "../redux/actions/clientAction";
+import { addCardToClient, loadClient } from "../redux/actions/clientAction";
 import Swal from "sweetalert2";
 import addCard from "../assets/addCard.png";
 
@@ -22,7 +20,7 @@ const AddCard = () => {
   const navigate = useNavigate();
 
   if (client.firstName === "") {
-    dispatch(loginAction());
+    dispatch(loadClient());
   }
   const alertSuccess = (msg) => {
     Swal.fire({
