@@ -4,7 +4,6 @@ import Button from "../components/Buttom";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { loginAction } from "../redux/actions/authenticationAction";
 import { loadClient } from "../redux/actions/clientAction";
 import PasswordInput from "../components/PasswordInput";
 import Swal from "sweetalert2";
