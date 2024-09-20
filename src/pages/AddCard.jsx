@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginAction } from "../redux/actions/authenticationAction";
 import { addCardToClient } from "../redux/actions/clientAction";
 import Swal from "sweetalert2";
+import addCard from "../assets/addCard.png";
+
 
 const AddCard = () => {
   const [cardType, setCardType] = useState("CREDIT");
@@ -88,7 +90,7 @@ const AddCard = () => {
       <SpamInformativo
         title={`Add a New Card`}
         text1="✨ Welcome to the creation view of your new bank card. Here, you can bring a new card to life that will accompany you on your financial adventures. 💳"
-        imgSrc="/public/addCard.png"
+        imgSrc={addCard}
       />
       <div className="flex items-center justify-center py-10 text-xl">
         <div className="flex justify-center items-center gap-10 py-5 bg-[#C4DFFE] rounded-3xl w-1/2">

@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadClient } from "../redux/actions/clientAction";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import loan from "../assets/loan.png";
 
 const Loans = () => {
   const [transactionType, setTransactionType] = useState("");
@@ -140,7 +141,7 @@ const Loans = () => {
         text1="Welcome to your new loan section! Here you can view or request loans quickly and easily."
         text2="Choose the type of loan you need, define the amount you want to request, and send your request."
         text3="Explore the available options and request your loan today!"
-        imgSrc="/public/loan.png"
+        imgSrc= {loan}
       />
       <div className="bg-[#69c2b6d7] m-3 p-2 rounded-3xl shadow lg:m-10 lg:shadow-2xl lg:p-10">
         <div className="flex flex-col lg:flex-row lg:py-5 justify-evenly">

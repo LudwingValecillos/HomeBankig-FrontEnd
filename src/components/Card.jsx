@@ -5,12 +5,12 @@ const Card = (promps) => {
   const colorRecibido = promps.color;
   let color;
   if (colorRecibido == "GOLD") {
-    color = "bg-[url('/public/cardGold.jpg')] bg-cover bg-center";
+    color = "bg-[url('https://media.istockphoto.com/id/505895970/es/foto/fondo-de-oro.jpg?s=612x612&w=0&k=20&c=qAuqo5F-d4pof0DF_3iQK43Mg7eGXQ-8bjKYWGDryds=')] bg-cover bg-center";
   } else if (colorRecibido == "TITANIUM") {
     color =
       "bg-[url('https://i.pinimg.com/originals/40/c8/78/40c87825702a67b2d462d57fc4d60d91.jpg')] bg-cover bg-center";
   } else if (colorRecibido == "SILVER") {
-    color = "bg-[url('/public/silver.jpg')] bg-cover bg-center";
+    color = "bg-[url('https://media.istockphoto.com/id/679479658/photo/silver-foil-texture-background.jpg?s=612x612&w=0&k=20&c=8M_Mo9Ig_OFsr4wTFtfZq8KziQYewrQEtuMCk250N7A=')] bg-cover bg-center";
   } 
 
   return (

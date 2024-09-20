@@ -8,6 +8,9 @@ import { loginAction } from "../redux/actions/authenticationAction";
 import { loadClient } from "../redux/actions/clientAction";
 import PasswordInput from "../components/PasswordInput";
 import Swal from "sweetalert2";
+import logo from "../assets/unnamed.jpeg";
+import img  from "../assets/bank1.jpeg";
+
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -46,12 +49,12 @@ const Login = () => {
         <section className="relative flex items-end h-32 bg-gray-900 lg:col-span-5 lg:h-full xl:col-span-6">
           <img
             alt=""
-            src="/public/bank1.jpeg"
+            src={img} 
             className="absolute inset-0 object-cover w-full h-full opacity-90"
           />
           <div className="hidden lg:relative lg:block lg:p-12">
             <img
-              src="/public/unnamed.jpeg"
+              src={logo}
               alt=""
               className="w-20 rounded-full"
             />

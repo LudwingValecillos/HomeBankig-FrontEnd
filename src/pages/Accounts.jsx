@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loadClient, addAccountToClient } from "../redux/actions/clientAction";
 import Swal from "sweetalert2";
 import Buttom from "../components/Buttom";
+import imagFinance from "../assets/Finance.png";
 
 const Main = () => {
   const [error, setError] = useState(null);
@@ -63,7 +64,7 @@ const Main = () => {
         text1="Here you'll find a clear and comprehensive summary of all your bank accounts. 👇"
         text2="✨ Want more details? Simply click on any account to explore more."
         text3="Enjoy a hassle-free banking experience! 🚀"
-        imgSrc="/public/Finance.png"
+        imgSrc={imagFinance}
       />
       <div className="flex flex-wrap gap-4 my-10 lg:px-80 justify-evenly bg-[#81ccc1bd] m-5 rounded-3xl p-5 shadow-2xl transition duration-300">
         <h2 className="w-full text-center border-b-2 border-[#111827] px-1 pb-4 text-4xl font-medium text-[#111827]">

@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import FormattedNumberInput from "../components/FormattedNumberInput";
 import { loadClient } from "../redux/actions/clientAction";
 import Swal from "sweetalert2";
+import transactions from "../assets/transactions.png";
+import transactionsdiv from "../assets/transactionsdiv.png";
 
 const Transactions = () => {
   const client = useSelector((state) => state.client.client);
@@ -83,11 +85,11 @@ const Transactions = () => {
         text1="Welcome to your financial management space! Here you can perform transactions and transfers quickly and securely."
         text2="You can send money, receive funds, and check the history of your transactions and transfers. Keep total control over your financial operations from one place."
         text3="Explore your options and manage your finances with ease and efficiency!"
-        imgSrc="/public/transactions.png"
+        imgSrc= {transactions}
       />
       <div className="flex flex-col gap-2 lg:gap-0 lg:flex-row  bg-[#C4DFFE] m-10 rounded-3xl shadow-2xl p-5">
         <div className="lg:w-1/2">
-          <img src="/public/transactionsdiv.png" alt="Transaction" />
+          <img src= {transactionsdiv} alt="Transaction" />
         </div>
 
         <div className="flex items-center justify-center lg:w-1/2">

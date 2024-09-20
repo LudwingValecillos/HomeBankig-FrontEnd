@@ -8,6 +8,7 @@ import axios from "axios";
 import Buttom from "../components/Buttom";
 import { useDispatch, useSelector } from "react-redux";
 import { loadClient } from "../redux/actions/clientAction";
+import accountDetails from "../assets/accountDetails.png";
 
 const AccountDetails = () => {
   const { id } = useParams(); // Get the id from the URL parameters
@@ -51,7 +52,7 @@ const AccountDetails = () => {
         text1="🌟 Welcome to the detailed view of your account! Here you can elegantly and clearly explore all the information about your selected account. 🏦"
         text2="💼 Enjoy a comprehensive breakdown of your transactions and balances. Every detail has been organized so you can manage your finances with the sophistication you deserve."
         text3="✨ Navigate with confidence and discover all the options available to you, designed to offer you an unparalleled banking experience! 🚀"
-        imgSrc="/public/accountDetails.png"
+        imgSrc= {accountDetails}
       />
       <div className="flex flex-col lg:flex-row items-center justify-center gap-2 lg:gap-10 lg:p-10 bg-[#A2D9D1] m-5 rounded-3xl shadow">
         <div className="p-2 lg:w-1/2 lg:px-40 AccountDetails">

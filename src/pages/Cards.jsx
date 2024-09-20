@@ -6,6 +6,7 @@ import PrintCard from "../components/PrintCard";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { loadClient } from "../redux/actions/clientAction";
+import Payment from "../assets/Payment.png";
 
 const Cards = () => {
   const client = useSelector((state) => state.client.client);
@@ -31,7 +32,7 @@ const Cards = () => {
         text1="Here you can view all the cards associated with your accounts."
         text2="✨ You can see the card number, type (credit or debit), color, and expiration date of each one."
         text3="Explore your options and maintain full control of your cards from one place! 🚀"
-        imgSrc="/public/Payment.png"
+        imgSrc= {Payment}
       />
       {client.cards.length !== 0 ? <PrintCard client={client} /> : ""}
       <Banner />
