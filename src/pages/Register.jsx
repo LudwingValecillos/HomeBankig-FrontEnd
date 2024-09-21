@@ -107,7 +107,7 @@ const alertWarning = () => {
               className="w-20 rounded-full"
             />
             <h2 className="mt-6 text-2xl font-bold text-white sm:text-3xl md:text-4xl">
-              Welcome to QuantumBank
+              Welcome to QuantumBank a
             </h2>
             <p className="mt-4 leading-relaxed text-white/90">
               Sign up to access your online bank account. Create your profile,
@@ -125,17 +125,9 @@ const alertWarning = () => {
                 alt=""
                 className="w-20 rounded-full"
               />
-              <h1 className="mt-2 text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">
-                Welcome to QuantumBank
-              </h1>
-              <p className="mt-4 leading-relaxed text-gray-500">
-                Sign up to access your online bank account. Create your profile,
-                set up your security credentials, and start managing your
-                finances with full control and convenience from anywhere.
-              </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="flex px-4 lg:px-0 flex-col gap-4 w-96">
+            <form onSubmit={handleSubmit} className="flex pt-16  px-4 lg:pt-0 lg:px-0 flex-col gap-4 w-96">
               <h2 className="text-5xl text-center">Sign up</h2>
               <LabelInput
                 type="text"
