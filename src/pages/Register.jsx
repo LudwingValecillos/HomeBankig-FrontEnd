@@ -135,7 +135,7 @@ const alertWarning = () => {
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-96">
+            <form onSubmit={handleSubmit} className="flex px-4 lg:px-0 flex-col gap-4 w-96">
               <h2 className="text-5xl text-center">Sign up</h2>
               <LabelInput
                 type="text"
