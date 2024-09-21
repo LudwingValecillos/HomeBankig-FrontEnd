@@ -88,7 +88,7 @@ const Loans = () => {
     };
 
     axios
-      .post("https://homebankig.onrender.com/api/api/loans/apply", trans, {
+      .post("https://homebankig.onrender.com/api/loans/apply", trans, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
