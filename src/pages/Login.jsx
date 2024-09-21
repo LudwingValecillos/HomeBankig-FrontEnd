@@ -33,6 +33,8 @@ const Login = () => {
       dispatch(loadClient());
     } catch (err) {
       alertError(err.response.data)
+      console.log(err);
+      
     }
   };
   const alertError = (msg) => {
