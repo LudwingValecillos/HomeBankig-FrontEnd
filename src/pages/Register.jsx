@@ -99,6 +99,7 @@ const Register = () => {
       console.log("Response:", response.data);
       navigate("/login");
     } catch (error) {
+      
       alertError(error.response.data);
     }
   };
