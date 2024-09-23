@@ -51,7 +51,7 @@ const token = localStorage.getItem("token");
 
     try {
       const response = await axios.post(
-        "https://homebankig.onrender.com/api/clients/current/accounts", token,
+        "https://homebankig.onrender.com/api/accounts/clients/current/accounts", token,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

@@ -18,7 +18,7 @@ const Main = () => {
 
   window.scrollTo(0, 0);
 
-  const showError = () => {
+  const showError = async () => {
     Swal.fire({
       title: "Are you sure?",
       text: "Do you want to create an account?",
@@ -27,9 +27,9 @@ const Main = () => {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, create it",
-    }).then((result) => {
+    }).then((result) =>  {
       if (result.isConfirmed) {
-        dispatch(addAccountToClient())
+         dispatch(addAccountToClient())
           .unwrap()
           .catch((error) => setError(error.message));
         console.log(error);
