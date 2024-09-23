@@ -107,7 +107,7 @@ const Loans = () => {
       return;
     }
 
-    axios.post("http://localhost:8080/api/loans/apply", transaction, {
+    axios.post("https://homebankig.onrender.com/api/loans/apply", transaction, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
