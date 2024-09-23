@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import logo from "../assets/unnamed.jpeg";
 import img  from "../assets/bank1.jpeg";
 import { loadClient } from "../redux/actions/clientAction";
+import { loadLoans } from "../redux/actions/loanAction";
 
 
 
@@ -18,25 +19,6 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    const user = { email, password };
-
-    try {
-      const res = await axios.post(
-        "https://homebankig.onrender.com/api/auth/login",user);
-      localStorage.setItem("token", res.data);
-      console.log(res.data);
-
-      navigate("/accounts/");
-      dispatch(loadClient());
-    } catch (err) {
-      alertError(err.response.data)
-      console.log(err);
-      
-    }
-  };
   const alertError = (msg) => {
     Swal.fire({
       title: "Oops! Something Went Wrong",
@@ -44,6 +26,36 @@ const Login = () => {
       icon: "error",
     });
   };
+
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const user = { email, password };
+    console.log(user);
+    
+    if(user.email == "" ){
+      alertError("Email is required")
+      return
+    }
+    if(user.password == ""){
+      alertError("Password is required")
+      return;
+    }
+    
+    try {
+      const res = await axios.post(
+        "http://localhost:8080/api/auth/login",user);
+      localStorage.setItem("token", res.data);
+      console.log(res.data);
+
+      navigate("/accounts/");
+      dispatch(loadClient());
+    } catch (err) {
+      alertError(err.response.data)
+      
+    }
+  };
+  
 
   return (
     <section className="bg-white">
@@ -79,7 +91,7 @@ const Login = () => {
                 type="email"
                 name="email"
                 title="Email"
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value.toLowerCase())}
               />
               <PasswordInput
                 name="password"
