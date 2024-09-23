@@ -7,7 +7,7 @@ export const loadLoans = createAsyncThunk(
     const token = localStorage.getItem("token");
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/loans/loansAvailable",
+        "https://homebankig.onrender.com/api/loans/loansAvailable",
         {
           headers: {
             Authorization: `Bearer ${token}`,

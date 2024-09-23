@@ -30,7 +30,7 @@ const token = localStorage.getItem("token");
 console.log(card);
 
   try {
-    const response = await axios.post("https://homebankig.onrender.com/clients/current/cards", card,
+    const response = await axios.post("https://homebankig.onrender.com/api/clients/current/cards", card,
       {
         headers: { Authorization: `Bearer ${token}` },
       }
@@ -51,7 +51,7 @@ const token = localStorage.getItem("token");
 
     try {
       const response = await axios.post(
-        "https://homebankig.onrender.com/clients/current/accounts", token,
+        "https://homebankig.onrender.com/api/clients/current/accounts", token,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
