@@ -54,8 +54,12 @@ const clientReducer = createReducer(initialState, (builder) => {
   builder
     // Manejo de loadClient
     .addCase(loadClient.fulfilled, (state, action) => {
-      state.client = action.payload;
-      state.status = "success";
+      return {
+        ...state, 
+        client: action.payload,
+        status: "success"
+      }
+     
     })
     .addCase(loadClient.pending, (state) => {
       state.status = "loading";
