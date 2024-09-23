@@ -6,9 +6,9 @@ const PrintCard = (promps) => {
   console.log(cards);
 
   return (
-    <div className="flex justify-center py-10 bg-[#81ccc1ce] m-5 rounded-3xl">
+    <div className="flex flex-col gap-2 p-2 m-2 lg:flex-row justify-center lg:py-10 bg-[#81ccc1ce] lg:m-5 rounded-3xl">
       {promps.client.cards.some((card) => card.type === "CREDIT") ? (
-        <article className="flex flex-col items-center w-1/2 gap-4">
+        <article className="flex flex-col items-center lg:w-1/2 gap-4">
           <h2 className="text-2xl text-center border-b-2 border-black">
             CREDIT
           </h2>
@@ -29,7 +29,7 @@ const PrintCard = (promps) => {
       ) : null}
 
       {promps.client.cards.some((card) => card.type === "DEBIT") ? (
-        <article className="flex flex-col items-center w-1/2 gap-4">
+        <article className="flex flex-col items-center lg:w-1/2 gap-4">
           <h2 className="text-2xl text-center border-b-2 border-black">
             DEBIT
           </h2>

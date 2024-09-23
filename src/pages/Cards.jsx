@@ -1,40 +1,41 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Banner from "../components/Banner";
 import Carousel from "../components/Carousel";
 import SpamInformativo from "../components/SpamInformativo";
 import PrintCard from "../components/PrintCard";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { loadClient } from "../redux/actions/clientAction";
+import Payment from "../assets/Payment.png";
 
 const Cards = () => {
-  const [client, setClient] = useState(null);
+  const client = useSelector((state) => state.client.client);
+
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8080/api/clients/")
-      .then((response) => {
-        setClient(response.data.find((client) => client.id === 2));
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
-   
-  // Check if client is null before using it
-  if (!client) {
-    return <p>Loading client data...</p>;
-  }
+    window.scrollTo(0, 0);
+
+    if (client.firstName === "") {
+      dispatch(loadClient())
+        .unwrap() // Esto te permitirá manejar el resultado del thunk en caso de error o éxito
+        .catch((error) => setError(error.message));
+    }
+  }, [dispatch, client.firstName]);
+
   return (
     <>
       <SpamInformativo
         title="Detailed View of Your Cards"
-        text1="Welcome to your personal card space! 🎉 Here you can view all the cards associated with your accounts. 👇"
-        text2="✨ You can see the card number, type (credit or debit), color, and expiration date of each one. Manage your finances quickly and securely."
+        text1="Here you can view all the cards associated with your accounts."
+        text2="✨ You can see the card number, type (credit or debit), color, and expiration date of each one."
         text3="Explore your options and maintain full control of your cards from one place! 🚀"
-        imgSrc="/public/Payment.png"
+        imgSrc= {Payment}
       />
-      <PrintCard client={client} /> 
+      {client.cards.length !== 0 ? <PrintCard client={client} /> : ""}
       <Banner />
-
       <Carousel />
     </>
   );

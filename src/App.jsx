@@ -7,7 +7,6 @@ import Transactions from "./pages/Transactions";
 import MainLayout from "./layouts/MainLayout";
 import AccountDetails from "./pages/AccountDetails";
 import AddCard from "./pages/AddCard";
-import AddAccount from "./pages/AddAccount";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 
@@ -18,11 +17,10 @@ function App() {
     <Routes>
       <Route path="/" element={<MainLayout />}>
         {/* Redirige la ruta raíz a "/accounts" */}
-        <Route index element={<Navigate to="accounts" replace />} />
+        <Route index element={<Navigate to="login" replace />} />
 
         <Route path="accounts" element={<Accounts />} />
         <Route path="account/:id" element={<AccountDetails />} />
-        <Route path="accounts/addAccount" element={<AddAccount />} />
 
         <Route path="cards" element={<Cards />} />
         <Route path="cards/addCard" element={<AddCard />} />
