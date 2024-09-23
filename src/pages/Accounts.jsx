@@ -15,9 +15,8 @@ const Main = () => {
   const dispatch = useDispatch();
   const client = useSelector((state) => state.client.client);
   const status = useSelector((state) => state.client.status);
-  console.log(client);
 
-  // window.scrollTo(0, 10);
+  window.scrollTo(0, 0);
 
   const showError = () => {
     Swal.fire({
@@ -44,9 +43,12 @@ const Main = () => {
     });
   };
 
-  // if (client.firstName === "") {
-  //   dispatch(loadClient());
-  // }
+  if (client.firstName === "") {
+    dispatch(loadClient());
+  }
+  if(status === "loading"){
+    
+  }
 
   if (error) {
     return <p>{error}</p>; // Mostrar mensaje de error si ocurre
@@ -80,9 +82,9 @@ const Main = () => {
           </Link>
         ))}
         {client.accounts?.length === 3 ? (
-          ""
+          <p className="p-5 font-bold rounded-3xl transition duration-300 border-4 border-blue-300 bg-white text-black">You have reached the limit of accounts to request</p>
         ) : (
-          <div className="w-full text-end p-5">
+          <div className="w-full text-center">
             <button
               className="bg-black p-5 font-bold text-white rounded-3xl transition duration-300 border-4 border-blue-300 hover:bg-white hover:text-black  "
               onClick={showError}

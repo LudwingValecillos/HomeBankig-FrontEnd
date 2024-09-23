@@ -38,7 +38,22 @@ const Register = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    
+    if(formData.firstName === ""){
+      alertError("First Name is required");
+    }
+    if(formData.lastName === ""){
+      alertError("Last Name is required");
+    }
+    if(formData.email === ""){
+      alertError("Email is required");
+    }
+    if(formData.password === ""){
+      alertError("Password is required");
+    }
+    if(formData.password !== formData.confirmPassword){
+      alertError("Password does not match");
+    }
     if (
       formData.password === formData.confirmPassword &&
       formData.password !== "" &&
@@ -50,14 +65,27 @@ const Register = () => {
       console.log("Submit");
       formData.email = formData.email.toLowerCase();
       sendPutRequest(formData);
-    } else {
-     
-      alertWarning();
     }
   };
 
 
   const sendPutRequest = async (data) => {
+    
+    // try {
+    //   const response = await axios.post(
+    //     "https://homebankig.onrender.com/api/auth/register",
+    //     data,
+    //     {
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //     }
+    //   );
+    //   console.log("Response:", response.data);
+    //   navigate("/login");
+    // } catch (error) {
+    //   alertError(error.response.data);
+    // }
     try {
       const response = await axios.post(
         "https://homebankig.onrender.com/api/auth/register",
@@ -133,7 +161,7 @@ const alertWarning = () => {
                 type="text"
                 name="firstName"
                 title="First Name"
-                value={formData.firstName}
+                value={(formData.firstName)  }
                 onChange={handleChange}
               />
               <LabelInput

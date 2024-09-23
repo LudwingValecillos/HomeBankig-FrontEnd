@@ -23,6 +23,8 @@ const Transactions = () => {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
+  
+  
 
   if (client.firstName === "") {
     dispatch(loadClient())
@@ -33,12 +35,31 @@ const Transactions = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    console.log(accountDestiny);
+    
     const trans = {
       amount: amount,
       description: description,
       sourceAccount: accountOrigin,
-      destinationAccount: accountDestiny,
+      destinationAccount: accountDestiny.toUpperCase(),
     };
+   
+    if(trans.amount === ""){
+      alertError("Please enter an amount");
+      return;
+    }
+    if(trans.description === ""){
+      alertError("Please enter a description");
+      return;
+    }
+    if(trans.sourceAccount === ""){
+      alertError("Please select a source account");
+      return;
+    }
+    if(trans.destinationAccount === ""){
+      alertError("Please select a destination account");
+      return;
+    }
 
     try {
       const token = localStorage.getItem("token");
@@ -85,11 +106,11 @@ const Transactions = () => {
         text1="Welcome to your financial management space! Here you can perform transactions and transfers quickly and securely."
         text2="You can send money, receive funds, and check the history of your transactions and transfers. Keep total control over your financial operations from one place."
         text3="Explore your options and manage your finances with ease and efficiency!"
-        imgSrc= {transactions}
+        imgSrc={transactions}
       />
       <div className="flex flex-col gap-2 lg:gap-0 lg:flex-row  bg-[#C4DFFE] m-10 rounded-3xl shadow-2xl p-5">
         <div className="lg:w-1/2">
-          <img src= {transactionsdiv} alt="Transaction" />
+          <img src={transactionsdiv} alt="Transaction" />
         </div>
 
         <div className="flex items-center justify-center lg:w-1/2">
@@ -101,10 +122,18 @@ const Transactions = () => {
               Transfer
             </h2>
             <div className="flex items-center justify-between gap-3">
-              <Radio
+              {client.accounts.length > 1 ? 
+                <Radio
                 options={["Own", "Others"]}
                 onChange={(e) => setTransactionType(e.target.value)}
               />
+              :
+              <Radio
+                options={["Others"]}
+                onChange={(e) => setTransactionType(e.target.value)}
+              />
+              }
+              
             </div>
             <div
               className={`flex gap-3 items-center ${
@@ -126,11 +155,9 @@ const Transactions = () => {
                 {" "}
                 {` ${
                   accountOrigin
-                    ? `$ ${
-                        client.accounts.find(
-                          (acc) => acc.number === accountOrigin
-                        )?.balance.toLocaleString()
-                      } `
+                    ? `$ ${client.accounts
+                        .find((acc) => acc.number === accountOrigin)
+                        ?.balance.toLocaleString()} `
                     : ""
                 } `}{" "}
               </p>
