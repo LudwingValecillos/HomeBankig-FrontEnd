@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import Buttom from "./Buttom";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import logo from "../assets/unnamed.jpeg";
+import { useDispatch, useSelector } from "react-redux";
+import { clearLoans } from "../redux/actions/loanAction";
+
 
 const Header = () => {
   const location = useLocation();
@@ -9,12 +14,36 @@ const Header = () => {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+  const loansAvailable = useSelector((state) => state.loansAvilable.loansAvilable);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const exit = () => {
+    Swal.fire({
+      title: "Are you sure you want to log out?",
+      text: "You will be redirected to the login view.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, log me out",
+      cancelButtonText: "Cancel"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem("token");
+        dispatch(clearLoans())
+        navigate("/login");
+      }
+    });
+  };
+  
 
   return (
     <header className="h-20 z-50 flex  justify-between items-center sticky top-0 bg-[#dbd9fbf1] shadow-xl p-4 lg:p-0 lg:flex-row lg:justify-evenly">
       <Link to="/accounts" className="flex gap-4 items-center">
         <img
-          src="/public/unnamed.jpeg"
+          src={logo}
           alt=""
           className="object-cover w-12 h-12 lg:w-16 lg:h-16 rounded-full"
         />
@@ -76,8 +105,8 @@ const Header = () => {
           />
         </Link>
       </nav>
-
-      <Link to="/login" className="hidden lg:block">
+      {/* to="/login" */}
+      <Link  className="hidden lg:block">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -85,6 +114,7 @@ const Header = () => {
           strokeWidth={1.5}
           stroke="currentColor"
           className="size-6 duration-200 hover:stroke-[#4F46E5] hover:transform hover:scale-150"
+          onClick={exit}
         >
           <path
             strokeLinecap="round"
@@ -98,3 +128,4 @@ const Header = () => {
 };
 
 export default Header;
+

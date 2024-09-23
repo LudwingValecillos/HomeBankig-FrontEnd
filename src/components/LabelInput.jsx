@@ -20,7 +20,7 @@ const LabelInput = ({ name, title, onChange }) => {
         id={name}
         name={name}
         value={inputValue}
-        className="peer w-full border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0"
+        className="peer w-full  border-none bg-transparent placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0"
         placeholder={title}
         onChange={handleChange}
         autoComplete="off"
