@@ -6,9 +6,8 @@ import PasswordInput from "../components/PasswordInput";
 import EmailInput from "../components/EmailInput";
 import axios from "axios";
 import Swal from "sweetalert2";
-import img  from "../assets/bank2.jpeg";
+import img from "../assets/bank2.jpeg";
 import logo from "../assets/unnamed.jpeg";
-
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -39,28 +38,39 @@ const Register = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    if (formData.firstName === "") {
+      alertError("First Name is required");
+    }
+    if (formData.lastName === "") {
+      alertError("Last Name is required");
+    }
+    if (formData.email === "") {
+      alertError("Email is required");
+    }
+    if (formData.password === "") {
+      alertError("Password is required");
+    }
+    if (formData.password !== formData.confirmPassword) {
+      alertError("Password does not match");
+    }
     if (
       formData.password === formData.confirmPassword &&
       formData.password !== "" &&
       formData.email !== "" &&
-      formData.firstName !== ""  &&
+      formData.firstName !== "" &&
       formData.lastName !== ""
     ) {
       console.log(formData);
       console.log("Submit");
       formData.email = formData.email.toLowerCase();
       sendPutRequest(formData);
-    } else {
-     
-      alertWarning();
     }
   };
-
 
   const sendPutRequest = async (data) => {
     try {
       const response = await axios.post(
-        "https://homebankig.onrender.com/api/auth/register",
+        "http://localhost:8080/api/auth/register",
         data,
         {
           headers: {
@@ -74,13 +84,13 @@ const Register = () => {
       alertError(error.response.data);
     }
   };
-const alertWarning = () => {
-  Swal.fire({
-    title: "Oops! Something Went Wrong",
-    text: "Please complete all fields",
-    icon: "warning",
-  });
-};
+  const alertWarning = () => {
+    Swal.fire({
+      title: "Oops! Something Went Wrong",
+      text: "Please complete all fields",
+      icon: "warning",
+    });
+  };
 
   const alertError = (msg) => {
     Swal.fire({
@@ -89,7 +99,6 @@ const alertWarning = () => {
       icon: "error",
     });
   };
-
 
   return (
     <section className="bg-white">
@@ -101,11 +110,7 @@ const alertWarning = () => {
             className="absolute inset-0 object-cover w-full h-full opacity-80"
           />
           <div className="hidden lg:relative lg:block lg:p-12">
-            <img
-              src={logo}
-              alt=""
-              className="w-20 rounded-full"
-            />
+            <img src={logo} alt="" className="w-20 rounded-full" />
             <h2 className="mt-6 text-2xl font-bold text-white sm:text-3xl md:text-4xl">
               Welcome to QuantumBank a
             </h2>
@@ -127,7 +132,10 @@ const alertWarning = () => {
               />
             </div>
 
-            <form onSubmit={handleSubmit} className="flex pt-16  px-4 lg:pt-0 lg:px-0 flex-col gap-4 w-96">
+            <form
+              onSubmit={handleSubmit}
+              className="flex pt-16  px-4 lg:pt-0 lg:px-0 flex-col gap-4 w-96"
+            >
               <h2 className="text-5xl text-center">Sign up</h2>
               <LabelInput
                 type="text"
