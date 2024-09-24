@@ -78,17 +78,17 @@ const Register = () => {
           },
         }
       );
-      console.log("Response:", response.data);
+      alertSuccess();
       navigate("/login");
     } catch (error) {
       alertError(error.response.data);
     }
   };
-  const alertWarning = () => {
+  const alertSuccess = () => {
     Swal.fire({
-      title: "Oops! Something Went Wrong",
-      text: "Please complete all fields",
-      icon: "warning",
+      title: "Congratulations!",
+      text: "You have registered successfully, enter your details to log in!",
+      icon: "success",
     });
   };
 
