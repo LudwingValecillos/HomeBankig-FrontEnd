@@ -15,7 +15,6 @@ const Cards = () => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
     window.scrollTo(0, 0);
 
     if (client.firstName === "") {
@@ -23,7 +22,6 @@ const Cards = () => {
         .unwrap() // Esto te permitirá manejar el resultado del thunk en caso de error o éxito
         .catch((error) => setError(error.message));
     }
-  }, [dispatch, client.firstName]);
 
   return (
     <>

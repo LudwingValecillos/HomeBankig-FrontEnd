@@ -3,6 +3,9 @@ import Buttom from "./Buttom";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import logo from "../assets/unnamed.jpeg";
+import { useDispatch, useSelector } from "react-redux";
+import { clearLoans } from "../redux/actions/loanAction";
+
 
 const Header = () => {
   const location = useLocation();
@@ -11,8 +14,10 @@ const Header = () => {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
-  const navigate = useNavigate();
+  const loansAvailable = useSelector((state) => state.loansAvilable.loansAvilable);
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const exit = () => {
     Swal.fire({
@@ -26,6 +31,8 @@ const Header = () => {
       cancelButtonText: "Cancel"
     }).then((result) => {
       if (result.isConfirmed) {
+        localStorage.removeItem("token");
+        dispatch(clearLoans())
         navigate("/login");
       }
     });

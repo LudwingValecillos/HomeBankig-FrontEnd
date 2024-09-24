@@ -68,6 +68,22 @@ const Register = () => {
   };
 
   const sendPutRequest = async (data) => {
+    
+    // try {
+    //   const response = await axios.post(
+    //     "https://homebankig.onrender.com/api/auth/register",
+    //     data,
+    //     {
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //     }
+    //   );
+    //   console.log("Response:", response.data);
+    //   navigate("/login");
+    // } catch (error) {
+    //   alertError(error.response.data);
+    // }
     try {
       const response = await axios.post(
         "http://localhost:8080/api/auth/register",
@@ -81,6 +97,7 @@ const Register = () => {
       alertSuccess();
       navigate("/login");
     } catch (error) {
+      
       alertError(error.response.data);
     }
   };
@@ -141,7 +158,7 @@ const Register = () => {
                 type="text"
                 name="firstName"
                 title="First Name"
-                value={formData.firstName}
+                value={(formData.firstName)  }
                 onChange={handleChange}
               />
               <LabelInput
