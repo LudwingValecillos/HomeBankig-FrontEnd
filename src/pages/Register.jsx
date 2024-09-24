@@ -71,21 +71,6 @@ const Register = () => {
 
   const sendPutRequest = async (data) => {
     
-    // try {
-    //   const response = await axios.post(
-    //     "https://homebankig.onrender.com/api/auth/register",
-    //     data,
-    //     {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //     }
-    //   );
-    //   console.log("Response:", response.data);
-    //   navigate("/login");
-    // } catch (error) {
-    //   alertError(error.response.data);
-    // }
     try {
       const response = await axios.post(
         "https://homebankig.onrender.com/api/auth/register",
