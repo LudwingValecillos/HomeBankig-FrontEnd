@@ -71,7 +71,7 @@ const Register = () => {
  
     try {
       const response = await axios.post(
-        "https://homebankig.onrender.com//api/auth/register",
+        "https://homebankig.onrender.com/api/auth/register",
         data,
         {
           headers: {
