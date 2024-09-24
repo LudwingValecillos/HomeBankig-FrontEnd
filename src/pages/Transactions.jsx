@@ -151,7 +151,7 @@ const Transactions = () => {
                   setAccountDestiny("");
                 }}
               />
-              <p className="text-2xl">
+              <p className="text-2xl bg-[#ffffffea] p-1 rounded-3xl">
                 {" "}
                 {` ${
                   accountOrigin
