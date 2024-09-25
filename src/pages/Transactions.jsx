@@ -21,6 +21,8 @@ const Transactions = () => {
   const [accountNumber, setAccountNumber] = useState("");
   const [description, setDescription] = useState("");
   const dispatch = useDispatch();
+  console.log(client.accounts);
+  
 
   const navigate = useNavigate();
   
@@ -52,7 +54,9 @@ const Transactions = () => {
       alertError("Please enter a description");
       return;
     }
-    if(client.accounts.find((account) => account.accountNumber == trans.sourceAccount).amount > trans.amount){
+
+    if(client.accounts.find((account) => account.number == accountOrigin).balance < trans.amount){
+      
       alertError("Insufficient funds");
       return;
     }
