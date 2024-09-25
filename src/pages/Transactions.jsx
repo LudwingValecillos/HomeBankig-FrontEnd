@@ -52,6 +52,10 @@ const Transactions = () => {
       alertError("Please enter a description");
       return;
     }
+    if(client.accounts.find((account) => account.accountNumber == trans.sourceAccount).amount > trans.amount){
+      alertError("Insufficient funds");
+      return;
+    }
     if(trans.sourceAccount === ""){
       alertError("Please select a source account");
       return;

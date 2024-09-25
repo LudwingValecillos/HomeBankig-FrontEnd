@@ -205,7 +205,7 @@ const Loans = () => {
                 <div className="flex items-center justify-between gap-3">
                   <InputSelect
                     name="account"
-                    title="Account of origin"
+                    title="Destination account"
                     options={client.accounts?.map((account) => account.number) || []}
                     onChange={handleAccountOriginChange}
                   />
