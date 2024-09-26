@@ -46,6 +46,7 @@ const Main = () => {
   if (client.firstName === "") {
     dispatch(loadClient());
   }
+  
   useEffect(() => {
   if (client.firstName === "") {
     dispatch(loadClient());

@@ -24,26 +24,25 @@ const Loans = () => {
   const [selectedLoan, setSelectedLoan] = useState(null);
 
   const client = useSelector((state) => state.client.client);
-  const loansAvailable = useSelector((state) => state.loansAvilable.loansAvilable);
+  const loansAvailable = useSelector(
+    (state) => state.loansAvilable.loansAvilable
+  );
   const state = useSelector((state) => state.loansAvilable.status);
-  
-  
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
     console.log(loansAvailable[0].id);
-    
-    if(loansAvailable[0].id == 0 || state == "idle"){
-      
+
+    if (loansAvailable[0].id == 0 || state == "idle") {
       dispatch(loadLoans()).unwrap();
     }
-    
+
     if (client.firstName === "") {
       dispatch(loadClient());
     }
-  },[loansAvailable, client])
- 
+  }, [loansAvailable, client, dispatch]);
 
   const simplifiedLoans = Array.isArray(client.loans)
     ? client.loans.map((loan) => ({
@@ -75,39 +74,39 @@ const Loans = () => {
   // Manejo del envío del formulario
   const handleSubmit = (event) => {
     event.preventDefault();
-    
+
     const transaction = {
       id:
-    
         transactionType === "Mortgage"
           ? 1
           : transactionType === "Automotive"
           ? 3
           : transactionType === "Personal"
-          ? 2 
-          :0,
+          ? 2
+          : 0,
       amount: amount,
       payments: paymentSelected.slice(0, 2).toString(),
       destinationAccount: accountOrigin,
     };
-    if(transaction.id === 0){
+    if (transaction.id === 0) {
       alertError("Please select a loan type");
       return;
     }
-    if(transaction.amount === ""){
+    if (transaction.amount === "") {
       alertError("Please enter an amount");
       return;
     }
-    if(transaction.payments === ""){
+    if (transaction.payments === "") {
       alertError("Please enter a number of payments");
       return;
     }
-    if(transaction.destinationAccount === ""){
+    if (transaction.destinationAccount === "") {
       alertError("Please select an account");
       return;
     }
 
-    axios.post("https://homebankig.onrender.com/api/loans/apply", transaction, {
+    axios
+      .post("https://homebankig.onrender.com/api/loans/apply", transaction, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -169,7 +168,9 @@ const Loans = () => {
           {simplifiedLoans.length === 0 ? (
             <div className="flex items-center justify-center lg:w-1/2">
               <h2 className="text-3xl text-center bg-white m-5 p-5 rounded-3xl shadow-2xl">
-                You don't have any active loans yet! Request your first loan now for quick and easy financial support. Explore your options and get started today!
+                You don't have any active loans yet! Request your first loan now
+                for quick and easy financial support. Explore your options and
+                get started today!
               </h2>
             </div>
           ) : (
@@ -194,19 +195,26 @@ const Loans = () => {
 
                 <div className="flex items-center justify-between gap-3">
                   <Radio
-                    options={loansAvailable.map((loan) => loan.name)}
+                    options={
+                      Array.isArray(loansAvailable)
+                        ? loansAvailable.map((loan) => loan.name)
+                        : []
+                    }
                     onChange={handleTransactionTypeChange}
                   />
                 </div>
                 <p className="text-2xl bg-[#ffffff] p-2 rounded-2xl">
-                  Available amount: ${selectedLoan?.maxAmount.toLocaleString() || 0}
+                  Available amount: $
+                  {selectedLoan?.maxAmount.toLocaleString() || 0}
                 </p>
 
                 <div className="flex items-center justify-between gap-3">
                   <InputSelect
                     name="account"
                     title="Destination account"
-                    options={client.accounts?.map((account) => account.number) || []}
+                    options={
+                      client.accounts?.map((account) => account.number) || []
+                    }
                     onChange={handleAccountOriginChange}
                   />
                   <InputSelect

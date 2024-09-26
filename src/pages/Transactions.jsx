@@ -21,7 +21,6 @@ const Transactions = () => {
   const [accountNumber, setAccountNumber] = useState("");
   const [description, setDescription] = useState("");
   const dispatch = useDispatch();
-  console.log(client.accounts);
   
 
   const navigate = useNavigate();
