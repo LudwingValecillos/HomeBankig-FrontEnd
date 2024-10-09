@@ -29,15 +29,15 @@ const Card = (promps) => {
         <div className="absolute inset-0 flex flex-col justify-between p-4 card-front rounded-2xl">
           <div className="flex justify-between">
           <img src={chip} alt="" className={`chip w-14 ${colorRecibido === "GOLD" ? " border-[#ffffff7a] border-2 rounded-md" : " "}`} />
-          <h2 className="text-sm">{promps.type} CARD </h2>
+          <h2 className="text-sm">{promps?.type} CARD </h2>
           </div>
-          <p>{promps.number}</p>
-          <p className="text-sm">{promps.number.slice(-4)} </p>
+          <p>{promps?.number}</p>
+          <p className="text-sm">{promps?.number?.slice(-4)} </p>
           <div className="flex items-center justify-between">
-            <p>{promps.name} </p>
+            <p>{promps?.name} </p>
             <p className="text-sm">
-              VALID {promps.expiration.slice(5, 7)}/
-              {promps.expiration.slice(8, 10)}
+              VALID {promps?.expiration.slice(5, 7)}/
+              {promps?.expiration.slice(8, 10)}
             </p>
           </div>
         </div>
